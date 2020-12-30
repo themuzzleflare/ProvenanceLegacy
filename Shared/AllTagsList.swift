@@ -7,10 +7,14 @@ struct AllTagsList: View {
 
     private let pageName: String = "Tags"
 
+    private var filteredTags: [TagResource] {
+        modelData.tags.filter { tag in
+            searchText.isEmpty || tag.id.localizedStandardContains(searchText)
+        }
+    }
+
     private var bottomText: String {
-        switch modelData.tags.filter({
-            searchText.isEmpty || $0.id.localizedStandardContains(searchText)
-        }).count {
+        switch filteredTags.count {
             case 0: return "No Tags"
             default: return "No More Tags"
 
@@ -22,14 +26,16 @@ struct AllTagsList: View {
             if modelData.tags.isEmpty && modelData.tagsError.isEmpty && modelData.tagsErrorResponse.isEmpty {
                 ProgressView {
                     Text("Fetching \(pageName)...")
+                        .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
             } else if !modelData.tagsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
                         .foregroundColor(.red)
-                        .bold()
+                        .font(.custom("CircularStd-Bold", size: 17))
                     Text(modelData.tagsError)
+                        .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
                         .opacity(0.65)
                 }
@@ -40,8 +46,9 @@ struct AllTagsList: View {
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
                             .foregroundColor(.red)
-                            .bold()
+                            .font(.custom("CircularStd-Bold", size: 17))
                         Text(apiError.detail)
+                            .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
                             .opacity(0.65)
                         Text(apiError.status)
@@ -55,17 +62,20 @@ struct AllTagsList: View {
                 .navigationTitle(pageName)
             } else {
                 List {
-                    SearchBar(text: $searchText, placeholder: "Search \(modelData.tags.count) \(pageName)")
-                    ForEach(modelData.tags.filter {
-                        searchText.isEmpty ||
-                            $0.id.localizedStandardContains(searchText)
-                    }) { tag in
-                        Text(tag.id)
-                            .font(.custom("CircularStd-Book", size: 17.0))
+                    Section {
+                        SearchBar(text: $searchText, placeholder: "Search \(modelData.tags.count) \(pageName)")
                     }
-                    Text(bottomText)
-                        .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
+                    Section {
+                        ForEach(filteredTags) { tag in
+                            Text(tag.id)
+                                .font(.custom("CircularStd-Book", size: 17.0))
+                        }
+                    }
+                    Section {
+                        Text(bottomText)
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
+                    }
                 }
                 .navigationTitle(pageName)
                 .navigationBarTitleDisplayMode(.inline)

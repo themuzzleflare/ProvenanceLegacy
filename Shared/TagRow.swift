@@ -5,6 +5,6 @@ struct TagRow: View {
     
     var body: some View {
         Text(tag.id)
-            .font(.custom("CircularStd-Bold", size: 17))
+            .font(.custom("CircularStd-Book", size: 17))
     }
 }

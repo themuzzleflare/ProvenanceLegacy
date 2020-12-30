@@ -94,7 +94,7 @@ struct provenanceApp: App {
 
     private func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
-        let urlParams = [pageSize.key:pageSize.value]
+        let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

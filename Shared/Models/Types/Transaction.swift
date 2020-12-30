@@ -15,7 +15,7 @@ struct TransactionResource: Hashable, Codable, Identifiable {
 }
 
 struct Attribute: Hashable, Codable {
-    var status: TransactionStatusEnum
+    private var status: TransactionStatusEnum
     var rawText: String?
     var description: String
     var message: String?
@@ -24,6 +24,13 @@ struct Attribute: Hashable, Codable {
     var cashback: CashbackObject?
     var amount: MoneyObject
     var foreignAmount: MoneyObject?
+
+    var isSettled: Bool {
+        switch status {
+            case .settled: return true
+            case .held: return false
+        }
+    }
 
     private var settledAt: String?
     var settledDate: String? {

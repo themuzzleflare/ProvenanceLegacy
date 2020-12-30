@@ -56,14 +56,11 @@ var upWide7: UIImage = UIImage(named: "UpLogoWidescreenSequence/7")!
 var upWide8: UIImage = UIImage(named: "UpLogoWidescreenSequence/8")!
 var upWideImages: [UIImage] = [upWide1, upWide2, upWide3, upWide4, upWide5, upWide6, upWide7, upWide8]
 let upWideAnimation: UIImage =  UIImage.animatedImage(with: upWideImages, duration: upDuration)!
-// MARK: - URL Parameters
-let pageSize = (key: "page[size]", value: "100")
-let pageAfter = (key: "page[after]", page2: "WyIyMDIwLTA5LTI4VDIyOjM0OjQwLjU2NzA3OTAwMFoiLCI0OWRiZjM2ZC0yYTE0LTQxODUtOTNjZC02MDRhN2UxMjA2NWMiXQ==", page3: "WyIyMDIwLTA3LTMxVDE2OjE0OjAzLjE1NTQxNzAwMFoiLCI5M2I0MDRmMy1mY2ZiLTQyOTctYTE5My02YTdhYzgxYjkzOGUiXQ==", page4: "WyIyMDIwLTA2LTAzVDIzOjUwOjM2LjI3NTY1NjAwMFoiLCI5NGRkYmUxMS0yOThlLTRmNDItYWFkNC1iYTdjM2JkYTczMWMiXQ==", page5: "WyIyMDIwLTA0LTIwVDA1OjAyOjM2LjI5MzcyMjAwMFoiLCIzYjg0OGYwYi1lYjUzLTRjMTItYTdlMS0yY2NjOTVlZjdmZTgiXQ==", page6: "WyIyMDIwLTAyLTIwVDAwOjU3OjA5LjY4NTEyMzAwMFoiLCIyNzQ1NzRlMC1iZjdiLTQ2ODgtYTQ2ZS0zY2E4OTJmZDRmZDUiXQ==")
-let filterCategory = (key: "filter[category]", value: "good-life")
-// MARK: - Up Banking Developer API Credentials
 // MARK: - NSURLSession Protocols & Extensions
 protocol URLQueryParameterStringConvertible {
-    var queryParameters: String {get}
+    var queryParameters: String {
+        get
+    }
 }
 extension Dictionary : URLQueryParameterStringConvertible {
     var queryParameters: String {
@@ -82,4 +79,8 @@ extension URL {
         let URLString : String = String(format: "%@?%@", self.absoluteString, parametersDictionary.queryParameters)
         return URL(string: URLString)!
     }
+}
+// MARK: - Colour Extension
+extension Color {
+    static let rowBackground = Color("RowBackgroundColour")
 }

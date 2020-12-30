@@ -56,14 +56,16 @@ struct AccountList: View {
             if modelData.accounts.isEmpty && modelData.accountsError.isEmpty && modelData.accountsErrorResponse.isEmpty {
                 ProgressView {
                     Text("Fetching Accounts...")
+                        .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
             } else if !modelData.accountsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
+                        .font(.custom("CircularStd-Bold", size: 17))
                         .foregroundColor(.red)
-                        .bold()
                     Text(modelData.accountsError)
+                        .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
                         .opacity(0.65)
                 }
@@ -76,9 +78,10 @@ struct AccountList: View {
                 ForEach(modelData.accountsErrorResponse, id: \.self) { apiError in
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
+                            .font(.custom("CircularStd-Bold", size: 17))
                             .foregroundColor(.red)
-                            .bold()
                         Text(apiError.detail)
+                            .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
                             .opacity(0.65)
                         Text(apiError.status)
@@ -97,26 +100,9 @@ struct AccountList: View {
                 List {
                     ForEach(modelData.accounts) { account in
                         NavigationLink(destination: TransactionList(account: account)) {
-                            HStack(alignment: .center, spacing: 0) {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text(account.attributes.displayName)
-                                        .font(.custom("CircularStd-Bold", size: 17))
-                                    Text(account.attributes.accountType.rawValue.capitalized)
-                                        .font(.custom("CircularStd-Book", size: 12))
-                                        .opacity(0.65)
-                                }
-                                Spacer()
-                                Group {
-                                    Text(account.attributes.balance.valueSymbol)
-                                    Text(account.attributes.balance.valueString)
-                                    Text(" \(account.attributes.balance.currencyCode)")
-                                }
-                                .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
-                                .multilineTextAlignment(.trailing)
-                            }
+                            AccountRow(account: account)
                         }
-
+                        .listRowBackground(Color.rowBackground)
                     }
                 }
                 .navigationTitle(pageName)
@@ -174,7 +160,7 @@ struct AccountList: View {
 
     private func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
-        let urlParams = [pageSize.key:pageSize.value]
+        let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

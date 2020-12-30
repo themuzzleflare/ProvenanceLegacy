@@ -27,7 +27,8 @@ struct About: View {
     var body: some View {
         NavigationView {
             List {
-                Section(footer: networkConnectivity) {
+                Section(footer: networkConnectivity
+                            .font(.custom("CircularStd-Book", size: 12))) {
                     VStack(spacing: 5) {
                         GIFImage(image: upAnimation)
                             .frame(width: 100, height: 100)

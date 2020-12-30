@@ -27,6 +27,12 @@
 		7A1A90E42567538600C2CB4F /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1A90E32567538600C2CB4F /* About.swift */; };
 		7A1A90E52567538600C2CB4F /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1A90E32567538600C2CB4F /* About.swift */; };
 		7A1AE7162567BB7C00E19442 /* GIFImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1AE7152567BB7C00E19442 /* GIFImage.swift */; };
+		7A29F8AC259AF73000E742E0 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8AB259AF73000E742E0 /* TransactionRow.swift */; };
+		7A29F8AD259AF73000E742E0 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8AB259AF73000E742E0 /* TransactionRow.swift */; };
+		7A29F8AE259AF73000E742E0 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8AB259AF73000E742E0 /* TransactionRow.swift */; };
+		7A29F8B6259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
+		7A29F8B7259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
+		7A29F8B8259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
 		7A41F6E82571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
 		7A41F6E92571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
 		7A41F6EA2571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
@@ -98,6 +104,8 @@
 		7A1A90D625674FB900C2CB4F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7A1A90E32567538600C2CB4F /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		7A1AE7152567BB7C00E19442 /* GIFImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFImage.swift; sourceTree = "<group>"; };
+		7A29F8AB259AF73000E742E0 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		7A29F8B5259BFE7800E742E0 /* AccountRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRow.swift; sourceTree = "<group>"; };
 		7A41F6E72571B78A003245A1 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		7A41F6F12571C2BF003245A1 /* AccountList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountList.swift; sourceTree = "<group>"; };
 		7A44EFDA2564FB3E00B5DDDC /* TagList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagList.swift; sourceTree = "<group>"; };
@@ -216,6 +224,8 @@
 				7A0E3CD325933A6B00A8BB69 /* ModelData.swift */,
 				7A0E3CE02593523F00A8BB69 /* ContentView.swift */,
 				7A17486525949ACC00C92182 /* Settings.swift */,
+				7A29F8AB259AF73000E742E0 /* TransactionRow.swift */,
+				7A29F8B5259BFE7800E742E0 /* AccountRow.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -438,12 +448,14 @@
 				7A0E3CD425933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486625949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D12571D730008D9762 /* Category.swift in Sources */,
+				7A29F8AC259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F6257209DE008D9762 /* Tag.swift in Sources */,
 				7A6DF93C2578D61300E46D6D /* SearchBar.swift in Sources */,
 				7A97048A2564A45400DCF1F7 /* provenanceApp.swift in Sources */,
 				7A0E3CE12593523F00A8BB69 /* ContentView.swift in Sources */,
 				7A9704A22564A56E00DCF1F7 /* Transaction.swift in Sources */,
 				7A564E4E2566398A007A9DC1 /* TransactionList.swift in Sources */,
+				7A29F8B6259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A1AE7162567BB7C00E19442 /* GIFImage.swift in Sources */,
 				7A41F6E82571B78A003245A1 /* Account.swift in Sources */,
 				7A58C80025720CE0008D9762 /* AllTagsList.swift in Sources */,
@@ -463,12 +475,14 @@
 				7A0E3CE22593523F00A8BB69 /* ContentView.swift in Sources */,
 				7A17486725949ACC00C92182 /* Settings.swift in Sources */,
 				7A0E3CD525933A6B00A8BB69 /* ModelData.swift in Sources */,
+				7A29F8AD259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7D22571D730008D9762 /* Category.swift in Sources */,
 				7A58C7F7257209DE008D9762 /* Tag.swift in Sources */,
 				7A1A90E52567538600C2CB4F /* About.swift in Sources */,
 				7A97048B2564A45400DCF1F7 /* provenanceApp.swift in Sources */,
 				7A9704A32564A56E00DCF1F7 /* Transaction.swift in Sources */,
 				7A564E4F2566398A007A9DC1 /* TransactionList.swift in Sources */,
+				7A29F8B7259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A41F6E92571B78A003245A1 /* Account.swift in Sources */,
 				7A58C80125720CE0008D9762 /* AllTagsList.swift in Sources */,
 				7AC5B2952564D9E000F81928 /* TransactionView.swift in Sources */,
@@ -488,12 +502,14 @@
 				7A0E3CD625933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486825949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D32571D730008D9762 /* Category.swift in Sources */,
+				7A29F8AE259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F8257209DE008D9762 /* Tag.swift in Sources */,
 				7AF8997625690B47002CD306 /* TagList.swift in Sources */,
 				7AF8996825690B26002CD306 /* provenanceApp.swift in Sources */,
 				7AF8997B25690B47002CD306 /* About.swift in Sources */,
 				7AF8997025690B3A002CD306 /* TransactionView.swift in Sources */,
 				7A41F6EA2571B78A003245A1 /* Account.swift in Sources */,
+				7A29F8B8259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7AF8996C25690B38002CD306 /* TransactionList.swift in Sources */,
 				7AF8998725690B50002CD306 /* GIFImage.swift in Sources */,
 				7A58C80225720CE0008D9762 /* AllTagsList.swift in Sources */,

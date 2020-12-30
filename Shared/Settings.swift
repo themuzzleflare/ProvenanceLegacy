@@ -6,16 +6,26 @@ struct Settings: View {
 
     private let pageName: String = "Settings"
 
+    private var apiKeyCellValue: String {
+        switch apiToken {
+            case "": return "None"
+            default: return apiToken
+        }
+    }
+
     var body: some View {
         NavigationView {
             List {
-                Section(footer: Text("The personal access token used to communicate with the Up Banking Developer API.")) {
+                Section(footer: Text("The personal access token used to communicate with the Up Banking Developer API.")
+                            .font(.custom("CircularStd-Book", size: 12))) {
                     NavigationLink(destination: APIKeyEditor()) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("API Key")
+                                .font(.custom("CircularStd-Bold", size: 17))
                                 .foregroundColor(.accentColor)
                             Spacer()
-                            Text(apiToken)
+                            Text(apiKeyCellValue)
+                                .font(.custom("CircularStd-Book", size: 17))
                                 .opacity(0.65)
                                 .multilineTextAlignment(.trailing)
                                 .lineLimit(1)
@@ -57,7 +67,7 @@ struct APIKeyEditor: View {
         .listStyle(GroupedListStyle())
         .navigationTitle("API Key")
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Success"), message: Text("Successfully changed API key."), dismissButton: .default(Text("Dismiss")))
+            Alert(title: Text("Success"), message: Text("Successfully changed API Key."), dismissButton: .default(Text("Dismiss")))
         }
     }
 }

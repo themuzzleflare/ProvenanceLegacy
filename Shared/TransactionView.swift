@@ -6,16 +6,35 @@ struct TransactionView: View {
     var transaction: TransactionResource
 
     private var statusIcon: Image {
-        switch transaction.attributes.status {
-            case .held: return Image(systemName: "clock")
-            case .settled: return Image(systemName: "checkmark.circle")
+        switch transaction.attributes.isSettled {
+            case false: return Image(systemName: "clock")
+            case true: return Image(systemName: "checkmark.circle")
         }
     }
 
     private var statusColour: Color {
-        switch transaction.attributes.status {
-            case .held: return .yellow
-            case .settled: return .green
+        switch transaction.attributes.isSettled {
+            case false: return .yellow
+            case true: return .green
+        }
+    }
+
+    private var statusString: String {
+        switch transaction.attributes.isSettled {
+            case true: return "Settled"
+            case false: return "Held"
+        }
+    }
+
+    private var categoryFilter: [CategoryResource] {
+        modelData.categories.filter { category in
+            category.id == transaction.relationships.category.data?.id
+        }
+    }
+
+    private var parentCategoryFilter: [CategoryResource] {
+        modelData.categories.filter { pcategory in
+            pcategory.id == transaction.relationships.parentCategory.data?.id
         }
     }
     
@@ -27,7 +46,7 @@ struct TransactionView: View {
                         .font(.custom("CircularStd-Bold", size: 17))
                     Spacer()
                     Group {
-                        Text(transaction.attributes.status.rawValue.capitalized)
+                        Text(statusString)
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
                         statusIcon
@@ -148,9 +167,7 @@ struct TransactionView: View {
                 }
             }
             if transaction.relationships.parentCategory.data != nil {
-                ForEach(modelData.categories.filter {
-                    $0.id == transaction.relationships.parentCategory.data!.id
-                }) { pcategory in
+                ForEach(parentCategoryFilter) { pcategory in
                     HStack(alignment: .center, spacing: 0) {
                         Text("Parent Category")
                             .font(.custom("CircularStd-Bold", size: 17))
@@ -163,9 +180,7 @@ struct TransactionView: View {
                 }
             }
             if transaction.relationships.category.data != nil {
-                ForEach(modelData.categories.filter {
-                    $0.id == transaction.relationships.category.data!.id
-                }) { category in
+                ForEach(categoryFilter) { category in
                     HStack(alignment: .center, spacing: 0) {
                         Text("Category")
                             .font(.custom("CircularStd-Bold", size: 17))
@@ -179,8 +194,15 @@ struct TransactionView: View {
             }
             if transaction.relationships.tags.data != [] {
                 NavigationLink(destination: TagList(transaction: transaction)) {
-                    Text("Tags (\(transaction.relationships.tags.data.count))")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                    HStack(alignment: .center, spacing: 0) {
+                        Text("Tags")
+                            .font(.custom("CircularStd-Bold", size: 17))
+                        Spacer()
+                        Text(transaction.relationships.tags.data.count.description)
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
             }
         }
