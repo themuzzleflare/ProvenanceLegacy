@@ -1,12 +1,28 @@
 import SwiftUI
 
-struct AccountList: View {
+struct CategoriesView: View {
     @EnvironmentObject var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
 
-    private let pageName: String = "Accounts"
+    @State private var searchText: String = ""
+
+    private let pageName: String = "Categories"
+
+    private var filteredCategories: [CategoryResource] {
+        modelData.categories.filter { category in
+            searchText.isEmpty || category.attributes.name.localizedStandardContains(searchText)
+        }
+    }
+
+    private var bottomText: String {
+        switch filteredCategories.count {
+            case 0: return "No Categories"
+            default: return "No More Categories"
+
+        }
+    }
 
     private var refreshButton: some View {
         Button(action: {
@@ -53,33 +69,35 @@ struct AccountList: View {
 
     var body: some View {
         NavigationView {
-            if modelData.accounts.isEmpty && modelData.accountsError.isEmpty && modelData.accountsErrorResponse.isEmpty {
+            if modelData.categories.isEmpty && modelData.categoriesError.isEmpty && modelData.categoriesErrorResponse.isEmpty {
                 ProgressView {
-                    Text("Fetching Accounts...")
+                    Text("Fetching \(pageName)...")
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
-            } else if !modelData.accountsError.isEmpty {
+                .navigationBarTitleDisplayMode(.inline)
+            } else if !modelData.categoriesError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
                         .foregroundColor(.red)
-                    Text(modelData.accountsError)
+                        .font(.custom("CircularStd-Bold", size: 17))
+                    Text(modelData.categoriesError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
                         .opacity(0.65)
                 }
                 .padding()
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
-            } else if !modelData.accountsErrorResponse.isEmpty {
-                ForEach(modelData.accountsErrorResponse, id: \.self) { apiError in
+            } else if !modelData.categoriesErrorResponse.isEmpty {
+                ForEach(modelData.categoriesErrorResponse, id: \.self) { apiError in
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
-                            .font(.custom("CircularStd-Bold", size: 17))
                             .foregroundColor(.red)
+                            .font(.custom("CircularStd-Bold", size: 17))
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
@@ -93,22 +111,32 @@ struct AccountList: View {
                     .padding()
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
             } else {
                 List {
-                    ForEach(modelData.accounts) { account in
-                        NavigationLink(destination: TransactionList(account: account)) {
-                            AccountRow(account: account)
+                    Section {
+                        SearchBar(text: $searchText, placeholder: "Search \(modelData.categories.count) \(pageName)")
+                    }
+                    Section(header: Text(pageName)) {
+                        ForEach(filteredCategories) { category in
+                            CategoriesRow(category: category)
                         }
+                    }
+                    Section {
+                        Text(bottomText)
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                     }
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
+                .listStyle(GroupedListStyle())
                 .toolbar {
                     refreshButton
                 }
-                .listStyle(GroupedListStyle())
             }
         }
     }

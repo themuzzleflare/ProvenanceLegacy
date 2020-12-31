@@ -49,9 +49,11 @@ struct APIKeyEditor: View {
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
 
+    private let pageName: String = "API Key"
+
     var body: some View {
         List {
-            TextField("API Token", text: $tokenString) { isEditing in
+            TextField("API Key", text: $tokenString) { isEditing in
                 self.isEditing = isEditing
             } onCommit: {
                 DispatchQueue.main.async {
@@ -65,7 +67,7 @@ struct APIKeyEditor: View {
             .disableAutocorrection(true)
         }
         .listStyle(GroupedListStyle())
-        .navigationTitle("API Key")
+        .navigationTitle(pageName)
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Success"), message: Text("Successfully changed API Key."), dismissButton: .default(Text("Dismiss")))
         }

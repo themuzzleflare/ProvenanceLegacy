@@ -8,6 +8,7 @@ struct ContentView: View {
     enum Tab {
         case transactions
         case tags
+        case categories
         case about
     }
 
@@ -24,6 +25,11 @@ struct ContentView: View {
                         Label("Tags", systemImage: "tag")
                     }
                     .tag(Tab.tags)
+                CategoriesView()
+                    .tabItem {
+                        Label("Categories", systemImage: "arrow.up.arrow.down.circle")
+                    }
+                    .tag(Tab.categories)
                 About()
                     .tabItem {
                         Label("About", systemImage: "info.circle")
@@ -34,8 +40,9 @@ struct ContentView: View {
             VStack(alignment: .center, spacing: 0) {
                 Text("Error")
                     .foregroundColor(.red)
-                    .bold()
+                    .font(.custom("CircularStd-Bold", size: 17))
                 Text("This app requires an active internet connection.")
+                    .font(.custom("CircularStd-Book", size: 17))
                     .multilineTextAlignment(.center)
                     .opacity(0.65)
             }

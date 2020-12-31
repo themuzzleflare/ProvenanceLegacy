@@ -23,7 +23,9 @@ struct About: View {
                 .foregroundColor(.red)
         }
     }
-    
+
+    private let pageName: String = "About"
+
     var body: some View {
         NavigationView {
             List {
@@ -70,7 +72,7 @@ struct About: View {
                     .disabled(!modelData.connectivity)
                 }
             }
-            .navigationTitle("About")
+            .navigationTitle(pageName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 settingsButton

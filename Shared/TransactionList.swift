@@ -88,15 +88,15 @@ struct TransactionList: View {
 
     private var bottomText: String {
         switch filteredTransactionsWithSearch.count {
-            case 0: return "No Transactions"
-            default: return "No More Transactions"
+            case 0: return "No \(pageName)"
+            default: return "No More \(pageName)"
         }
     }
 
     private var searchPlaceholder: String {
         switch filteredTransactions.count {
             case 1: return "Search 1 Transaction"
-            default: return "Search \(filteredTransactions.count) Transactions"
+            default: return "Search \(filteredTransactions.count) \(pageName)"
         }
     }
 
@@ -118,10 +118,12 @@ struct TransactionList: View {
         }
     }
 
+    private let pageName: String = "Transactions"
+
     var body: some View {
         if modelData.transactions.isEmpty {
             ProgressView {
-                Text("Fetching Transactions...")
+                Text("Fetching \(pageName)...")
                     .font(.custom("CircularStd-Book", size: 17))
             }
             .navigationTitle(account.attributes.displayName)
@@ -153,12 +155,11 @@ struct TransactionList: View {
                         }
                     }
                 }
-                Section {
+                Section(header: Text(pageName)) {
                     ForEach(filteredTransactionsWithSearch) { transaction in
                         NavigationLink(destination: TransactionView(transaction: transaction)) {
                             TransactionRow(transaction: transaction)
                         }
-                        .listRowBackground(Color.rowBackground)
                     }
                 }
                 Section {
