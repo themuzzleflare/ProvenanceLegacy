@@ -22,7 +22,6 @@ struct Settings: View {
                         HStack(alignment: .center, spacing: 0) {
                             Text("API Key")
                                 .font(.custom("CircularStd-Bold", size: 17))
-                                .foregroundColor(.accentColor)
                             Spacer()
                             Text(apiKeyCellValue)
                                 .font(.custom("CircularStd-Book", size: 17))
@@ -53,7 +52,7 @@ struct APIKeyEditor: View {
 
     var body: some View {
         List {
-            TextField("API Key", text: $tokenString) { isEditing in
+            TextField(pageName, text: $tokenString) { isEditing in
                 self.isEditing = isEditing
             } onCommit: {
                 DispatchQueue.main.async {
@@ -69,7 +68,7 @@ struct APIKeyEditor: View {
         .listStyle(GroupedListStyle())
         .navigationTitle(pageName)
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Success"), message: Text("Successfully changed API Key."), dismissButton: .default(Text("Dismiss")))
+            Alert(title: Text("Success"), message: Text("Successfully changed \(pageName)."), dismissButton: .default(Text("Dismiss")))
         }
     }
 }

@@ -10,17 +10,29 @@ final class ModelData: ObservableObject {
     @Published var transactionsErrorResponse = [ErrorObject]()
     @Published var transactionsError: String = ""
 
+    @Published var transactionsPagination = Pagination()
+    @Published var loadMoreTransactionsError: String = ""
+    @Published var transactionsStatusCode: Int = 0
+
     @Published var accounts = [AccountResource]()
     @Published var accountsErrorResponse = [ErrorObject]()
     @Published var accountsError: String = ""
+
+    @Published var accountsStatusCode: Int = 0
 
     @Published var categories = [CategoryResource]()
     @Published var categoriesErrorResponse = [ErrorObject]()
     @Published var categoriesError: String = ""
 
+    @Published var categoriesStatusCode = 0
+
     @Published var tags = [TagResource]()
     @Published var tagsErrorResponse = [ErrorObject]()
     @Published var tagsError: String = ""
+
+    @Published var tagsPagination = Pagination()
+    @Published var loadMoreTagsError: String = ""
+    @Published var tagsStatusCode = 0
 
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "Monitor")

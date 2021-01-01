@@ -7,6 +7,7 @@ struct ContentView: View {
 
     enum Tab {
         case transactions
+        case accounts
         case tags
         case categories
         case about
@@ -15,11 +16,16 @@ struct ContentView: View {
     var body: some View {
         if modelData.connectivity {
             TabView(selection: $selection) {
-                AccountList()
+                TransactionList()
                     .tabItem {
                         Label("Transactions", systemImage: "list.bullet")
                     }
                     .tag(Tab.transactions)
+                AccountList()
+                    .tabItem {
+                        Label("Accounts", systemImage: "list.bullet.rectangle")
+                    }
+                    .tag(Tab.accounts)
                 AllTagsList()
                     .tabItem {
                         Label("Tags", systemImage: "tag")

@@ -43,6 +43,13 @@ struct provenanceApp: App {
                     modelData.transactionsErrorResponse = []
                     modelData.categoriesErrorResponse = []
                     modelData.tagsErrorResponse = []
+                    modelData.loadMoreTransactionsError = ""
+                    modelData.transactionsStatusCode = 0
+                    modelData.loadMoreTagsError = ""
+                    modelData.tagsStatusCode = 0
+                    modelData.accountsStatusCode = 0
+                    modelData.categoriesStatusCode = 0
+
                 }
             }
         }
@@ -58,6 +65,9 @@ struct provenanceApp: App {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.accountsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -103,6 +113,9 @@ struct provenanceApp: App {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.transactionsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -118,6 +131,7 @@ struct provenanceApp: App {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
                             modelData.transactions = decodedResponse.data
+                            modelData.transactionsPagination = decodedResponse.links
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
@@ -147,6 +161,9 @@ struct provenanceApp: App {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.categoriesStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -182,7 +199,9 @@ struct provenanceApp: App {
     }
 
     private func listTags() {
-        let url = URL(string: "https://api.up.com.au/api/v1/tags")!
+        var url = URL(string: "https://api.up.com.au/api/v1/tags")!
+        let urlParams = ["page[size]":"200"]
+        url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -191,6 +210,9 @@ struct provenanceApp: App {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.tagsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {

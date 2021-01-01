@@ -28,13 +28,13 @@ struct TransactionView: View {
 
     private var categoryFilter: [CategoryResource] {
         modelData.categories.filter { category in
-            category.id == transaction.relationships.category.data?.id
+            (transaction.relationships.category.data?.id.contains(category.id))!
         }
     }
 
     private var parentCategoryFilter: [CategoryResource] {
         modelData.categories.filter { pcategory in
-            pcategory.id == transaction.relationships.parentCategory.data?.id
+            (transaction.relationships.parentCategory.data?.id.contains(pcategory.id))!
         }
     }
     
@@ -168,27 +168,31 @@ struct TransactionView: View {
             }
             if transaction.relationships.parentCategory.data != nil {
                 ForEach(parentCategoryFilter) { pcategory in
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("Parent Category")
-                            .font(.custom("CircularStd-Bold", size: 17))
-                        Spacer()
-                        Text(pcategory.attributes.name)
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
-                            .multilineTextAlignment(.trailing)
+                    NavigationLink(destination: TransactionsByCategory(categoryName: pcategory)) {
+                        HStack(alignment: .center, spacing: 0) {
+                            Text("Parent Category")
+                                .font(.custom("CircularStd-Bold", size: 17))
+                            Spacer()
+                            Text(pcategory.attributes.name)
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
+                                .multilineTextAlignment(.trailing)
+                        }
                     }
                 }
             }
             if transaction.relationships.category.data != nil {
                 ForEach(categoryFilter) { category in
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("Category")
-                            .font(.custom("CircularStd-Bold", size: 17))
-                        Spacer()
-                        Text(category.attributes.name)
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
-                            .multilineTextAlignment(.trailing)
+                    NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
+                        HStack(alignment: .center, spacing: 0) {
+                            Text("Category")
+                                .font(.custom("CircularStd-Bold", size: 17))
+                            Spacer()
+                            Text(category.attributes.name)
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
+                                .multilineTextAlignment(.trailing)
+                        }
                     }
                 }
             }

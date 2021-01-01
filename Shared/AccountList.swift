@@ -39,6 +39,24 @@ struct AccountList: View {
                 if !modelData.tagsErrorResponse.isEmpty {
                     modelData.tagsErrorResponse = []
                 }
+                if !modelData.loadMoreTransactionsError.isEmpty {
+                    modelData.loadMoreTransactionsError = ""
+                }
+                if !modelData.loadMoreTagsError.isEmpty {
+                    modelData.loadMoreTagsError = ""
+                }
+                if modelData.transactionsStatusCode != 0 {
+                    modelData.transactionsStatusCode = 0
+                }
+                if modelData.accountsStatusCode != 0 {
+                    modelData.accountsStatusCode = 0
+                }
+                if modelData.tagsStatusCode != 0 {
+                    modelData.tagsStatusCode = 0
+                }
+                if modelData.categoriesStatusCode != 0 {
+                    modelData.categoriesStatusCode = 0
+                }
             }
             listAccounts()
             listTransactions()
@@ -53,9 +71,9 @@ struct AccountList: View {
 
     var body: some View {
         NavigationView {
-            if modelData.accounts.isEmpty && modelData.accountsError.isEmpty && modelData.accountsErrorResponse.isEmpty {
+            if modelData.accounts.isEmpty && modelData.accountsError.isEmpty && modelData.accountsErrorResponse.isEmpty && modelData.accountsStatusCode == 0 {
                 ProgressView {
-                    Text("Fetching Accounts...")
+                    Text("Fetching \(pageName)...")
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
@@ -99,7 +117,7 @@ struct AccountList: View {
             } else {
                 List {
                     ForEach(modelData.accounts) { account in
-                        NavigationLink(destination: TransactionList(account: account)) {
+                        NavigationLink(destination: TransactionsByAccount(accountName: account)) {
                             AccountRow(account: account)
                         }
                     }
@@ -123,6 +141,9 @@ struct AccountList: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.accountsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -168,6 +189,9 @@ struct AccountList: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.transactionsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -183,6 +207,7 @@ struct AccountList: View {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
                             modelData.transactions = decodedResponse.data
+                            modelData.transactionsPagination = decodedResponse.links
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
@@ -212,6 +237,9 @@ struct AccountList: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.categoriesStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -247,7 +275,9 @@ struct AccountList: View {
     }
 
     private func listTags() {
-        let url = URL(string: "https://api.up.com.au/api/v1/tags")!
+        var url = URL(string: "https://api.up.com.au/api/v1/tags")!
+        let urlParams = ["page[size]":"200"]
+        url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -256,6 +286,9 @@ struct AccountList: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    modelData.tagsStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {

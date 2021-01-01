@@ -53,6 +53,15 @@
 		7A58C80125720CE0008D9762 /* AllTagsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A58C7FF25720CE0008D9762 /* AllTagsList.swift */; };
 		7A58C80225720CE0008D9762 /* AllTagsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A58C7FF25720CE0008D9762 /* AllTagsList.swift */; };
 		7A6DF93C2578D61300E46D6D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DF9382578D61300E46D6D /* SearchBar.swift */; };
+		7A7CBC94259DC33E00CC43CC /* TransactionsByTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */; };
+		7A7CBC95259DC33E00CC43CC /* TransactionsByTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */; };
+		7A7CBC96259DC33E00CC43CC /* TransactionsByTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */; };
+		7A7CBC9B259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */; };
+		7A7CBC9C259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */; };
+		7A7CBC9D259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */; };
+		7A7CBCA2259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
+		7A7CBCA3259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
+		7A7CBCA4259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
 		7A97048A2564A45400DCF1F7 /* provenanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704772564A45200DCF1F7 /* provenanceApp.swift */; };
 		7A97048B2564A45400DCF1F7 /* provenanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704772564A45200DCF1F7 /* provenanceApp.swift */; };
 		7A9704A22564A56E00DCF1F7 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704A12564A56E00DCF1F7 /* Transaction.swift */; };
@@ -123,6 +132,9 @@
 		7A58C7F5257209DE008D9762 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		7A58C7FF25720CE0008D9762 /* AllTagsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTagsList.swift; sourceTree = "<group>"; };
 		7A6DF9382578D61300E46D6D /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByTag.swift; sourceTree = "<group>"; };
+		7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByCategory.swift; sourceTree = "<group>"; };
+		7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByAccount.swift; sourceTree = "<group>"; };
 		7A9704772564A45200DCF1F7 /* provenanceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = provenanceApp.swift; sourceTree = "<group>"; };
 		7A97047E2564A45400DCF1F7 /* Provenance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Provenance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A9704812564A45400DCF1F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -241,6 +253,9 @@
 				7AFA3A51259D8E9A00B18780 /* CategoriesRow.swift */,
 				7A1A90E32567538600C2CB4F /* About.swift */,
 				7A17486525949ACC00C92182 /* Settings.swift */,
+				7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */,
+				7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */,
+				7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -463,11 +478,13 @@
 				7A0E3CD425933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486625949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D12571D730008D9762 /* Category.swift in Sources */,
+				7A7CBC9B259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A52259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
 				7A29F8AC259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F6257209DE008D9762 /* Tag.swift in Sources */,
 				7A6DF93C2578D61300E46D6D /* SearchBar.swift in Sources */,
 				7AFA3A4B259D8E9100B18780 /* CategoriesView.swift in Sources */,
+				7A7CBC94259DC33E00CC43CC /* TransactionsByTag.swift in Sources */,
 				7A97048A2564A45400DCF1F7 /* provenanceApp.swift in Sources */,
 				7A0E3CE12593523F00A8BB69 /* ContentView.swift in Sources */,
 				7A9704A22564A56E00DCF1F7 /* Transaction.swift in Sources */,
@@ -475,6 +492,7 @@
 				7AFA3A41259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B6259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A1AE7162567BB7C00E19442 /* GIFImage.swift in Sources */,
+				7A7CBCA2259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7A41F6E82571B78A003245A1 /* Account.swift in Sources */,
 				7A58C80025720CE0008D9762 /* AllTagsList.swift in Sources */,
 				7AC5B2942564D9E000F81928 /* TransactionView.swift in Sources */,
@@ -493,11 +511,13 @@
 				7A0E3CE22593523F00A8BB69 /* ContentView.swift in Sources */,
 				7A17486725949ACC00C92182 /* Settings.swift in Sources */,
 				7A0E3CD525933A6B00A8BB69 /* ModelData.swift in Sources */,
+				7A7CBC9C259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A53259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
 				7A29F8AD259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7D22571D730008D9762 /* Category.swift in Sources */,
 				7A58C7F7257209DE008D9762 /* Tag.swift in Sources */,
 				7AFA3A4C259D8E9100B18780 /* CategoriesView.swift in Sources */,
+				7A7CBC95259DC33E00CC43CC /* TransactionsByTag.swift in Sources */,
 				7A1A90E52567538600C2CB4F /* About.swift in Sources */,
 				7A97048B2564A45400DCF1F7 /* provenanceApp.swift in Sources */,
 				7A9704A32564A56E00DCF1F7 /* Transaction.swift in Sources */,
@@ -505,6 +525,7 @@
 				7AFA3A42259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B7259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A41F6E92571B78A003245A1 /* Account.swift in Sources */,
+				7A7CBCA3259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7A58C80125720CE0008D9762 /* AllTagsList.swift in Sources */,
 				7AC5B2952564D9E000F81928 /* TransactionView.swift in Sources */,
 				7A02B3832564F68E005D9825 /* TagRow.swift in Sources */,
@@ -523,11 +544,13 @@
 				7A0E3CD625933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486825949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D32571D730008D9762 /* Category.swift in Sources */,
+				7A7CBC9D259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A54259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
 				7A29F8AE259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F8257209DE008D9762 /* Tag.swift in Sources */,
 				7AF8997625690B47002CD306 /* TagList.swift in Sources */,
 				7AFA3A4D259D8E9100B18780 /* CategoriesView.swift in Sources */,
+				7A7CBC96259DC33E00CC43CC /* TransactionsByTag.swift in Sources */,
 				7AF8996825690B26002CD306 /* provenanceApp.swift in Sources */,
 				7AF8997B25690B47002CD306 /* About.swift in Sources */,
 				7AF8997025690B3A002CD306 /* TransactionView.swift in Sources */,
@@ -535,6 +558,7 @@
 				7AFA3A43259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B8259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7AF8996C25690B38002CD306 /* TransactionList.swift in Sources */,
+				7A7CBCA4259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7AF8998725690B50002CD306 /* GIFImage.swift in Sources */,
 				7A58C80225720CE0008D9762 /* AllTagsList.swift in Sources */,
 				7AF8997525690B47002CD306 /* TagRow.swift in Sources */,
@@ -598,7 +622,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -653,7 +677,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -671,11 +695,12 @@
 				DEVELOPMENT_TEAM = JDL5FY6SCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -693,11 +718,12 @@
 				DEVELOPMENT_TEAM = JDL5FY6SCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -725,6 +751,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -750,6 +777,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -770,12 +798,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.2;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Debug;
 		};
@@ -792,12 +821,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.2;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

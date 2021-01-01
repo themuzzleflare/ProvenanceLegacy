@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TagRow: View {
-    var tag: RelationshipData
+    var tag: TagResource
     
     var body: some View {
         Text(tag.id)

@@ -62,7 +62,7 @@ struct Attribute: Hashable, Codable {
         }
     }
     
-    enum TransactionStatusEnum: String, CaseIterable, Codable, Hashable, Identifiable {
+    private enum TransactionStatusEnum: String, CaseIterable, Codable, Hashable, Identifiable {
         case held = "HELD"
         case settled = "SETTLED"
 
