@@ -143,6 +143,7 @@ struct AllTagsList: View {
                             ForEach(filteredTags) { tag in
                                 NavigationLink(destination: TransactionsByTag(tagName: tag)) {
                                     AllTagsRow(tag: tag)
+                                        .tag(tag)
                                 }
                             }
                         }
@@ -164,7 +165,9 @@ struct AllTagsList: View {
     }
 
     private func listAccounts() {
-        let url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        let urlParams = ["page[size]":"100"]
+        url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")

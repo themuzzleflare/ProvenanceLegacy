@@ -62,6 +62,9 @@
 		7A7CBCA2259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
 		7A7CBCA3259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
 		7A7CBCA4259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */; };
+		7A86CC4D259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */; };
+		7A86CC4E259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */; };
+		7A86CC4F259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */; };
 		7A97048A2564A45400DCF1F7 /* provenanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704772564A45200DCF1F7 /* provenanceApp.swift */; };
 		7A97048B2564A45400DCF1F7 /* provenanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704772564A45200DCF1F7 /* provenanceApp.swift */; };
 		7A9704A22564A56E00DCF1F7 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9704A12564A56E00DCF1F7 /* Transaction.swift */; };
@@ -135,6 +138,7 @@
 		7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByTag.swift; sourceTree = "<group>"; };
 		7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByCategory.swift; sourceTree = "<group>"; };
 		7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByAccount.swift; sourceTree = "<group>"; };
+		7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByRelatedAccount.swift; sourceTree = "<group>"; };
 		7A9704772564A45200DCF1F7 /* provenanceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = provenanceApp.swift; sourceTree = "<group>"; };
 		7A97047E2564A45400DCF1F7 /* Provenance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Provenance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A9704812564A45400DCF1F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -202,6 +206,7 @@
 		7A1A90C32567375E00C2CB4F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7AA3F2E8259FEDE800642ABB /* Tag Interface */,
 				7A0E3CD325933A6B00A8BB69 /* ModelData.swift */,
 				7A6DF9382578D61300E46D6D /* SearchBar.swift */,
 				7A1AE7152567BB7C00E19442 /* GIFImage.swift */,
@@ -256,6 +261,7 @@
 				7A7CBC93259DC33E00CC43CC /* TransactionsByTag.swift */,
 				7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */,
 				7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */,
+				7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -306,6 +312,13 @@
 				7AA23CF625672E0300A30143 /* CircularStd-Bold.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		7AA3F2E8259FEDE800642ABB /* Tag Interface */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Tag Interface";
 			sourceTree = "<group>";
 		};
 		7AF8995025690AF3002CD306 /* tvOS */ = {
@@ -480,6 +493,7 @@
 				7A58C7D12571D730008D9762 /* Category.swift in Sources */,
 				7A7CBC9B259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A52259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
+				7A86CC4D259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */,
 				7A29F8AC259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F6257209DE008D9762 /* Tag.swift in Sources */,
 				7A6DF93C2578D61300E46D6D /* SearchBar.swift in Sources */,
@@ -513,6 +527,7 @@
 				7A0E3CD525933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A7CBC9C259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A53259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
+				7A86CC4E259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */,
 				7A29F8AD259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7D22571D730008D9762 /* Category.swift in Sources */,
 				7A58C7F7257209DE008D9762 /* Tag.swift in Sources */,
@@ -546,6 +561,7 @@
 				7A58C7D32571D730008D9762 /* Category.swift in Sources */,
 				7A7CBC9D259DCDDB00CC43CC /* TransactionsByCategory.swift in Sources */,
 				7AFA3A54259D8E9A00B18780 /* CategoriesRow.swift in Sources */,
+				7A86CC4F259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift in Sources */,
 				7A29F8AE259AF73000E742E0 /* TransactionRow.swift in Sources */,
 				7A58C7F8257209DE008D9762 /* Tag.swift in Sources */,
 				7AF8997625690B47002CD306 /* TagList.swift in Sources */,

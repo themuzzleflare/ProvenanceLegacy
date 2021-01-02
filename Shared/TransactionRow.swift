@@ -9,7 +9,7 @@ struct TransactionRow: View {
                 Text(transaction.attributes.description)
                     .font(.custom("CircularStd-Bold", size: 20))
                 Text(transaction.attributes.createdDate)
-                    .font(.custom("CircularStd-Book", size: 16))
+                    .font(.custom("CircularStd-Book", size: 14))
                     .opacity(0.65)
             }
             Spacer()

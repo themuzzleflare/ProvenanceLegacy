@@ -140,7 +140,9 @@ struct TransactionsByTag: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                transactionsByTagStatusCode = statusCode
+                DispatchQueue.main.async {
+                    transactionsByTagStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {

@@ -24,7 +24,6 @@ struct TransactionsByAccount: View {
         }
     }
 
-
     @State private var loading = false
 
     @State private var searchText: String = ""
@@ -158,7 +157,9 @@ struct TransactionsByAccount: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                transactionsByAccountStatusCode = statusCode
+                DispatchQueue.main.async {
+                    transactionsByAccountStatusCode = statusCode
+                }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
@@ -206,7 +207,7 @@ struct TransactionsByAccount: View {
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByAccountError = decodedResponse.errors.first!.detail
+                            loadMoreTransactionsByAccountError = decodedResponse.errors.first?.detail ?? "Authorisation Error!"
                             loading.toggle()
                         }
                     } else {
@@ -231,7 +232,7 @@ struct TransactionsByAccount: View {
                 }
             } else {
                 DispatchQueue.main.async {
-                    loadMoreTransactionsByAccountError = error?.localizedDescription ?? "Unknown error."
+                    loadMoreTransactionsByAccountError = error?.localizedDescription ?? "Unknown error!"
                     loading.toggle()
                 }
             }
@@ -279,12 +280,12 @@ struct AccountInfo: View {
                             .font(.custom("CircularStd-Bold", size: 17))
                         Spacer()
                         Text(account.id)
-                            .font(.custom("CircularStd-Book", size: 17))
+                            .font(.custom("Menlo-Regular", size: 17))
                             .opacity(0.65)
                             .multilineTextAlignment(.trailing)
                     }
                     HStack(alignment: .center, spacing: 0) {
-                        Text("Created At")
+                        Text("Creation Date")
                             .font(.custom("CircularStd-Bold", size: 17))
                         Spacer()
                         Text(account.attributes.createdDate)

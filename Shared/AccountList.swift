@@ -119,6 +119,7 @@ struct AccountList: View {
                     ForEach(modelData.accounts) { account in
                         NavigationLink(destination: TransactionsByAccount(accountName: account)) {
                             AccountRow(account: account)
+                                .tag(account)
                         }
                     }
                 }
@@ -132,7 +133,9 @@ struct AccountList: View {
     }
 
     private func listAccounts() {
-        let url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        let urlParams = ["page[size]":"100"]
+        url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")

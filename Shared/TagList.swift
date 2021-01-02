@@ -15,6 +15,7 @@ struct TagList: View {
         List(tagFilter) { tag in
             NavigationLink(destination: TransactionsByTag(tagName: tag)) {
                 TagRow(tag: tag)
+                    .tag(tag)
             }
         }
         .navigationTitle("Tags")

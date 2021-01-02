@@ -7,15 +7,15 @@ struct TransactionView: View {
 
     private var statusIcon: Image {
         switch transaction.attributes.isSettled {
-            case false: return Image(systemName: "clock")
             case true: return Image(systemName: "checkmark.circle")
+            case false: return Image(systemName: "clock")
         }
     }
 
     private var statusColour: Color {
         switch transaction.attributes.isSettled {
-            case false: return .yellow
             case true: return .green
+            case false: return .yellow
         }
     }
 
@@ -28,19 +28,25 @@ struct TransactionView: View {
 
     private var categoryFilter: [CategoryResource] {
         modelData.categories.filter { category in
-            (transaction.relationships.category.data?.id.contains(category.id))!
+            transaction.relationships.category.data?.id == category.id
         }
     }
 
     private var parentCategoryFilter: [CategoryResource] {
         modelData.categories.filter { pcategory in
-            (transaction.relationships.parentCategory.data?.id.contains(pcategory.id))!
+            transaction.relationships.parentCategory.data?.id == pcategory.id
+        }
+    }
+
+    private var accountFilter: [AccountResource] {
+        modelData.accounts.filter { account in
+            transaction.relationships.account.data.id == account.id
         }
     }
     
     var body: some View {
         List {
-            Group {
+            Section {
                 HStack(alignment: .center, spacing: 5) {
                     Text("Status")
                         .font(.custom("CircularStd-Bold", size: 17))
@@ -53,6 +59,30 @@ struct TransactionView: View {
                             .foregroundColor(statusColour)
                     }
                     .multilineTextAlignment(.trailing)
+                }
+                ForEach(accountFilter) { account in
+                    NavigationLink(destination: TransactionsByRelatedAccount(accountName: account)) {
+                        HStack(alignment: .center, spacing: 0) {
+                            Text("Account")
+                                .font(.custom("CircularStd-Bold", size: 17))
+                            Spacer()
+                            Text(account.attributes.displayName)
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .multilineTextAlignment(.trailing)
+                                .opacity(0.65)
+                        }
+                    }
+                }
+            }
+            Section {
+                HStack(alignment: .center, spacing: 0) {
+                    Text("Description")
+                        .font(.custom("CircularStd-Bold", size: 17))
+                    Spacer()
+                    Text(transaction.attributes.description)
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .multilineTextAlignment(.trailing)
+                        .opacity(0.65)
                 }
                 if transaction.attributes.rawText != nil {
                     HStack(alignment: .center, spacing: 0) {
@@ -77,7 +107,7 @@ struct TransactionView: View {
                     }
                 }
             }
-            Group {
+            Section {
                 if transaction.attributes.holdInfo != nil {
                     if transaction.attributes.holdInfo!.amount.value != transaction.attributes.amount.value {
                         HStack(alignment: .center, spacing: 0) {
@@ -113,8 +143,6 @@ struct TransactionView: View {
 
                     }
                 }
-            }
-            Group {
                 if transaction.attributes.foreignAmount != nil {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Foreign \(transaction.attributes.foreignAmount!.transType)")
@@ -144,9 +172,9 @@ struct TransactionView: View {
                     .multilineTextAlignment(.trailing)
                 }
             }
-            Group {
+            Section {
                 HStack(alignment: .center, spacing: 0) {
-                    Text("Created At")
+                    Text("Creation Date")
                         .font(.custom("CircularStd-Bold", size: 17))
                     Spacer()
                     Text(transaction.attributes.createdDate)
@@ -156,7 +184,7 @@ struct TransactionView: View {
                 }
                 if transaction.attributes.settledDate != nil {
                     HStack(alignment: .center, spacing: 0) {
-                        Text("Settled At")
+                        Text("Settlement Date")
                             .font(.custom("CircularStd-Bold", size: 17))
                         Spacer()
                         Text(transaction.attributes.settledDate!)
@@ -166,46 +194,52 @@ struct TransactionView: View {
                     }
                 }
             }
-            if transaction.relationships.parentCategory.data != nil {
-                ForEach(parentCategoryFilter) { pcategory in
-                    NavigationLink(destination: TransactionsByCategory(categoryName: pcategory)) {
-                        HStack(alignment: .center, spacing: 0) {
-                            Text("Parent Category")
-                                .font(.custom("CircularStd-Bold", size: 17))
-                            Spacer()
-                            Text(pcategory.attributes.name)
-                                .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
-                                .multilineTextAlignment(.trailing)
+            if transaction.relationships.parentCategory.data != nil || transaction.relationships.category.data != nil {
+                Section {
+                    if transaction.relationships.parentCategory.data != nil {
+                        ForEach(parentCategoryFilter) { pcategory in
+                            NavigationLink(destination: TransactionsByCategory(categoryName: pcategory)) {
+                                HStack(alignment: .center, spacing: 0) {
+                                    Text("Parent Category")
+                                        .font(.custom("CircularStd-Bold", size: 17))
+                                    Spacer()
+                                    Text(pcategory.attributes.name)
+                                        .font(.custom("CircularStd-Book", size: 17))
+                                        .opacity(0.65)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                        }
+                    }
+                    if transaction.relationships.category.data != nil {
+                        ForEach(categoryFilter) { category in
+                            NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
+                                HStack(alignment: .center, spacing: 0) {
+                                    Text("Category")
+                                        .font(.custom("CircularStd-Bold", size: 17))
+                                    Spacer()
+                                    Text(category.attributes.name)
+                                        .font(.custom("CircularStd-Book", size: 17))
+                                        .opacity(0.65)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
                         }
                     }
                 }
             }
-            if transaction.relationships.category.data != nil {
-                ForEach(categoryFilter) { category in
-                    NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
+            Section {
+                if transaction.relationships.tags.data != [] {
+                    NavigationLink(destination: TagList(transaction: transaction)) {
                         HStack(alignment: .center, spacing: 0) {
-                            Text("Category")
+                            Text("Tags")
                                 .font(.custom("CircularStd-Bold", size: 17))
                             Spacer()
-                            Text(category.attributes.name)
+                            Text(transaction.relationships.tags.data.count.description)
                                 .font(.custom("CircularStd-Book", size: 17))
                                 .opacity(0.65)
                                 .multilineTextAlignment(.trailing)
                         }
-                    }
-                }
-            }
-            if transaction.relationships.tags.data != [] {
-                NavigationLink(destination: TagList(transaction: transaction)) {
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("Tags")
-                            .font(.custom("CircularStd-Bold", size: 17))
-                        Spacer()
-                        Text(transaction.relationships.tags.data.count.description)
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
-                            .multilineTextAlignment(.trailing)
                     }
                 }
             }

@@ -1,16 +1,27 @@
 import SwiftUI
 
-struct TransactionsByCategory: View {
-    @State private var transactionsByCategoryData = [TransactionResource]()
-    @State private var transactionsByCategoryPagination = Pagination()
-    @State private var transactionsByCategoryError: String = ""
-    @State private var transactionsByCategoryStatusCode: Int = 0
-    @State private var loadMoreTransactionsByCategoryError: String = ""
+struct TransactionsByRelatedAccount: View {
+    @State private var transactionsByRelatedAccountData = [TransactionResource]()
+    @State private var transactionsByRelatedAccountPagination = Pagination()
+    @State private var transactionsByRelatedAccountError: String = ""
+    @State private var transactionsByRelatedAccountStatusCode: Int = 0
+    @State private var loadMoreTransactionsByRelatedAccountError: String = ""
 
-    var categoryName: CategoryResource
+    @State private var showingInfo = false
+    var accountName: AccountResource
 
-    private var category: String {
-        return categoryName.id
+    private var account: String {
+        return accountName.id
+    }
+
+    private var infoButton: some View {
+        Button(action: {
+            self.showingInfo.toggle()
+        }) {
+            Image(systemName: "info.circle")
+                .imageScale(.large)
+                .accessibilityLabel("Info")
+        }
     }
 
     @State private var loading = false
@@ -18,7 +29,7 @@ struct TransactionsByCategory: View {
     @State private var searchText: String = ""
 
     private var pageName: String {
-        return categoryName.attributes.name
+        return accountName.attributes.displayName
     }
 
     private var bottomText: String {
@@ -29,14 +40,14 @@ struct TransactionsByCategory: View {
     }
 
     private var searchPlaceholder: String {
-        switch transactionsByCategoryData.count {
+        switch transactionsByRelatedAccountData.count {
             case 1: return "Search 1 Transaction"
-            default: return "Search \(transactionsByCategoryData.count) Transactions"
+            default: return "Search \(transactionsByRelatedAccountData.count) Transactions"
         }
     }
 
     private var filteredTransactions: [TransactionResource] {
-        transactionsByCategoryData.filter { transaction in
+        transactionsByRelatedAccountData.filter { transaction in
             searchText.isEmpty || transaction.attributes.description.localizedStandardContains(searchText)
         }
     }
@@ -46,21 +57,21 @@ struct TransactionsByCategory: View {
 
     var body: some View {
         Group {
-            if transactionsByCategoryData.isEmpty && transactionsByCategoryError.isEmpty && transactionsByCategoryStatusCode == 0 {
+            if transactionsByRelatedAccountData.isEmpty && transactionsByRelatedAccountError.isEmpty && transactionsByRelatedAccountStatusCode == 0 {
                 ProgressView {
                     Text("Fetching Transactions...")
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
                 .onAppear {
-                    listTransactionsByCategory(category)
+                    listTransactionsByRelatedAccount(account)
                 }
-            } else if !transactionsByCategoryError.isEmpty {
+            } else if !transactionsByRelatedAccountError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
                         .font(.custom("CircularStd-Bold", size: 17))
                         .foregroundColor(.red)
-                    Text(transactionsByCategoryError)
+                    Text(transactionsByRelatedAccountError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
                         .opacity(0.65)
@@ -86,24 +97,24 @@ struct TransactionsByCategory: View {
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
                     }
-                    if transactionsByCategoryPagination.next != nil {
+                    if transactionsByRelatedAccountPagination.next != nil {
                         Section {
                             if loading == true {
                                 ProgressView()
                             } else {
                                 Button(action: {
                                     DispatchQueue.main.async {
-                                        if !loadMoreTransactionsByCategoryError.isEmpty {
-                                            loadMoreTransactionsByCategoryError = ""
+                                        if !loadMoreTransactionsByRelatedAccountError.isEmpty {
+                                            loadMoreTransactionsByRelatedAccountError = ""
                                         }
                                         loading.toggle()
-                                        nextPage(transactionsByCategoryPagination.next!)
+                                        nextPage(transactionsByRelatedAccountPagination.next!)
                                     }
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
-                                        if !loadMoreTransactionsByCategoryError.isEmpty {
-                                            Text(loadMoreTransactionsByCategoryError)
+                                        if !loadMoreTransactionsByRelatedAccountError.isEmpty {
+                                            Text(loadMoreTransactionsByRelatedAccountError)
                                                 .font(.caption)
                                                 .opacity(0.65)
                                         }
@@ -119,19 +130,19 @@ struct TransactionsByCategory: View {
         }
         .onDisappear {
             DispatchQueue.main.async {
-                if transactionsByCategoryStatusCode != 0 {
-                    transactionsByCategoryStatusCode = 0
+                if transactionsByRelatedAccountStatusCode != 0 {
+                    transactionsByRelatedAccountStatusCode = 0
                 }
-                if transactionsByCategoryError != "" {
-                    transactionsByCategoryError = ""
+                if transactionsByRelatedAccountError != "" {
+                    transactionsByRelatedAccountError = ""
                 }
             }
         }
     }
 
-    private func listTransactionsByCategory(_ category: String) {
-        var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
-        let urlParams = ["filter[category]":category, "page[size]":"100"]
+    private func listTransactionsByRelatedAccount(_ account: String) {
+        var url = URL(string: "https://api.up.com.au/api/v1/accounts/\(account)/transactions")!
+        let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -141,36 +152,36 @@ struct TransactionsByCategory: View {
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 DispatchQueue.main.async {
-                    transactionsByCategoryStatusCode = statusCode
+                    transactionsByRelatedAccountStatusCode = statusCode
                 }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByCategoryError = decodedResponse.errors.first!.detail
+                            transactionsByRelatedAccountError = decodedResponse.errors.first!.detail
                         }
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByCategoryError = "Authorisation Error!"
+                            transactionsByRelatedAccountError = "Authorisation Error!"
                         }
                     }
                     print("Transactions Fetch Unsuccessful: HTTP \(statusCode)")
                 } else {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByCategoryData = decodedResponse.data
-                            transactionsByCategoryPagination = decodedResponse.links
+                            transactionsByRelatedAccountData = decodedResponse.data
+                            transactionsByRelatedAccountPagination = decodedResponse.links
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByCategoryError = "JSON Serialisation failed!"
+                            transactionsByRelatedAccountError = "JSON Serialisation failed!"
                         }
                         print("JSON Serialisation failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    transactionsByCategoryError = error?.localizedDescription ?? "Unknown error."
+                    transactionsByRelatedAccountError = error?.localizedDescription ?? "Unknown error."
                 }
                 print(error?.localizedDescription ?? "Unknown error.")
             }
@@ -190,32 +201,32 @@ struct TransactionsByCategory: View {
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByCategoryError = decodedResponse.errors.first!.detail
+                            loadMoreTransactionsByRelatedAccountError = decodedResponse.errors.first!.detail
                             loading.toggle()
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByCategoryError = "Authorisation Error!"
+                            loadMoreTransactionsByRelatedAccountError = "Authorisation Error!"
                             loading.toggle()
                         }
                     }
                 } else {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByCategoryData.append(contentsOf: decodedResponse.data)
-                            transactionsByCategoryPagination = decodedResponse.links
+                            transactionsByRelatedAccountData.append(contentsOf: decodedResponse.data)
+                            transactionsByRelatedAccountPagination = decodedResponse.links
                             loading.toggle()
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByCategoryError = "JSON Serialisation failed!"
+                            loadMoreTransactionsByRelatedAccountError = "JSON Serialisation failed!"
                             loading.toggle()
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    loadMoreTransactionsByCategoryError = error?.localizedDescription ?? "Unknown error."
+                    loadMoreTransactionsByRelatedAccountError = error?.localizedDescription ?? "Unknown error."
                     loading.toggle()
                 }
             }

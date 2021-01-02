@@ -50,20 +50,25 @@ struct APIKeyEditor: View {
 
     private let pageName: String = "API Key"
 
+    var footer: String?
+
     var body: some View {
         List {
-            TextField(pageName, text: $tokenString) { isEditing in
-                self.isEditing = isEditing
-            } onCommit: {
-                DispatchQueue.main.async {
-                    if tokenString != apiToken {
-                        self.showingAlert.toggle()
+            Section(footer: Text(footer ?? "")
+                        .foregroundColor(.red)) {
+                TextField(pageName, text: $tokenString) { isEditing in
+                    self.isEditing = isEditing
+                } onCommit: {
+                    DispatchQueue.main.async {
+                        if tokenString != apiToken {
+                            self.showingAlert.toggle()
+                        }
+                        apiToken = tokenString
                     }
-                    apiToken = tokenString
                 }
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
             }
-            .autocapitalization(.none)
-            .disableAutocorrection(true)
         }
         .listStyle(GroupedListStyle())
         .navigationTitle(pageName)

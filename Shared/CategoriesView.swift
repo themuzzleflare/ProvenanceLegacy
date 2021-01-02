@@ -143,6 +143,7 @@ struct CategoriesView: View {
                             ForEach(filteredCategories) { category in
                                 NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
                                     CategoriesRow(category: category)
+                                        .tag(category)
                                 }
                             }
                         }
@@ -164,7 +165,9 @@ struct CategoriesView: View {
     }
 
     private func listAccounts() {
-        let url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
+        let urlParams = ["page[size]":"100"]
+        url = url.appendingQueryParameters(urlParams)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")

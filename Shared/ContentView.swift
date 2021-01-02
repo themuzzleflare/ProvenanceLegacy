@@ -5,6 +5,9 @@ struct ContentView: View {
 
     @State private var selection: Tab = .transactions
 
+    @AppStorage("Settings.apiToken")
+    private var apiToken: String = ""
+
     enum Tab {
         case transactions
         case accounts
@@ -15,32 +18,40 @@ struct ContentView: View {
 
     var body: some View {
         if modelData.connectivity {
-            TabView(selection: $selection) {
-                TransactionList()
-                    .tabItem {
-                        Label("Transactions", systemImage: "list.bullet")
-                    }
-                    .tag(Tab.transactions)
-                AccountList()
-                    .tabItem {
-                        Label("Accounts", systemImage: "list.bullet.rectangle")
-                    }
-                    .tag(Tab.accounts)
-                AllTagsList()
-                    .tabItem {
-                        Label("Tags", systemImage: "tag")
-                    }
-                    .tag(Tab.tags)
-                CategoriesView()
-                    .tabItem {
-                        Label("Categories", systemImage: "arrow.up.arrow.down.circle")
-                    }
-                    .tag(Tab.categories)
-                About()
-                    .tabItem {
-                        Label("About", systemImage: "info.circle")
-                    }
-                    .tag(Tab.about)
+            if apiToken.isEmpty {
+                NavigationView {
+                    APIKeyEditor(footer: "Required")
+                        .navigationTitle("API Key")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+            } else {
+                TabView(selection: $selection) {
+                    TransactionList()
+                        .tabItem {
+                            Label("Transactions", systemImage: "list.bullet")
+                        }
+                        .tag(Tab.transactions)
+                    AccountList()
+                        .tabItem {
+                            Label("Accounts", systemImage: "list.bullet.rectangle")
+                        }
+                        .tag(Tab.accounts)
+                    AllTagsList()
+                        .tabItem {
+                            Label("Tags", systemImage: "tag")
+                        }
+                        .tag(Tab.tags)
+                    CategoriesView()
+                        .tabItem {
+                            Label("Categories", systemImage: "arrow.up.arrow.down.circle")
+                        }
+                        .tag(Tab.categories)
+                    About()
+                        .tabItem {
+                            Label("About", systemImage: "info.circle")
+                        }
+                        .tag(Tab.about)
+                }
             }
         } else {
             VStack(alignment: .center, spacing: 0) {
