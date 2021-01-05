@@ -7,6 +7,8 @@ struct TransactionsByRelatedAccount: View {
     @State private var transactionsByRelatedAccountStatusCode: Int = 0
     @State private var loadMoreTransactionsByRelatedAccountError: String = ""
 
+    var modelData: ModelData
+
     @State private var showingInfo = false
     var accountName: AccountResource
 
@@ -69,7 +71,7 @@ struct TransactionsByRelatedAccount: View {
             } else if !transactionsByRelatedAccountError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
                     Text(transactionsByRelatedAccountError)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -84,11 +86,18 @@ struct TransactionsByRelatedAccount: View {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
                     }
                     if filteredTransactions.count != 0 {
-                        Section(header: Text("Transactions")) {
+                        Section(header: Text("Transactions")
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactions) { transaction in
-                                NavigationLink(destination: TransactionView(transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = transaction.attributes.description
+                                    })
+                                }
+                                .tag(transaction)
                             }
                         }
                     }
@@ -113,6 +122,7 @@ struct TransactionsByRelatedAccount: View {
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
+                                            .font(.custom("CircularStd-Book", size: 17))
                                         if !loadMoreTransactionsByRelatedAccountError.isEmpty {
                                             Text(loadMoreTransactionsByRelatedAccountError)
                                                 .font(.caption)

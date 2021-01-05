@@ -55,7 +55,7 @@ struct provenanceApp: App {
         }
     }
 
-    private func listAccounts() {
+     func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
@@ -104,7 +104,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-    private func listTransactions() {
+     func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
@@ -153,7 +153,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-    private func listCategories() {
+     func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -200,7 +200,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-    private func listTags() {
+     func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
         url = url.appendingQueryParameters(urlParams)

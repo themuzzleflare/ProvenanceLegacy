@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CategoriesView: View {
-    @EnvironmentObject var modelData: ModelData
+    var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
@@ -98,7 +98,7 @@ struct CategoriesView: View {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
                         .foregroundColor(.red)
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                     Text(modelData.categoriesError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
@@ -115,7 +115,7 @@ struct CategoriesView: View {
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
                             .foregroundColor(.red)
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
@@ -139,12 +139,18 @@ struct CategoriesView: View {
                         SearchBar(text: $searchText, placeholder: "Search \(modelData.categories.count) \(pageName)")
                     }
                     if filteredCategories.count != 0 {
-                        Section(header: Text(pageName)) {
+                        Section(header: Text(pageName)
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredCategories) { category in
-                                NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
+                                NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: category)) {
                                     CategoriesRow(category: category)
-                                        .tag(category)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = category.attributes.name
+                                    })
+                                }
+                                .tag(category)
                             }
                         }
                     }

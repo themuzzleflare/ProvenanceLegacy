@@ -33,6 +33,9 @@
 		7A29F8B6259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
 		7A29F8B7259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
 		7A29F8B8259BFE7800E742E0 /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A29F8B5259BFE7800E742E0 /* AccountRow.swift */; };
+		7A3066DB25A44611006CEA6F /* TextLimiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3066DA25A44611006CEA6F /* TextLimiter.swift */; };
+		7A3066DC25A44611006CEA6F /* TextLimiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3066DA25A44611006CEA6F /* TextLimiter.swift */; };
+		7A3066DD25A44611006CEA6F /* TextLimiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3066DA25A44611006CEA6F /* TextLimiter.swift */; };
 		7A41F6E82571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
 		7A41F6E92571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
 		7A41F6EA2571B78A003245A1 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A41F6E72571B78A003245A1 /* Account.swift */; };
@@ -43,6 +46,9 @@
 		7A44EFDC2564FB3E00B5DDDC /* TagList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44EFDA2564FB3E00B5DDDC /* TagList.swift */; };
 		7A564E4E2566398A007A9DC1 /* TransactionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A564E4D2566398A007A9DC1 /* TransactionList.swift */; };
 		7A564E4F2566398A007A9DC1 /* TransactionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A564E4D2566398A007A9DC1 /* TransactionList.swift */; };
+		7A57C43325A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57C43225A04C0600898FAB /* TransactionsByRelatedTag.swift */; };
+		7A57C43425A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57C43225A04C0600898FAB /* TransactionsByRelatedTag.swift */; };
+		7A57C43525A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A57C43225A04C0600898FAB /* TransactionsByRelatedTag.swift */; };
 		7A58C7D12571D730008D9762 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A58C7D02571D730008D9762 /* Category.swift */; };
 		7A58C7D22571D730008D9762 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A58C7D02571D730008D9762 /* Category.swift */; };
 		7A58C7D32571D730008D9762 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A58C7D02571D730008D9762 /* Category.swift */; };
@@ -127,10 +133,12 @@
 		7A1AE7152567BB7C00E19442 /* GIFImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFImage.swift; sourceTree = "<group>"; };
 		7A29F8AB259AF73000E742E0 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		7A29F8B5259BFE7800E742E0 /* AccountRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRow.swift; sourceTree = "<group>"; };
+		7A3066DA25A44611006CEA6F /* TextLimiter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLimiter.swift; sourceTree = "<group>"; };
 		7A41F6E72571B78A003245A1 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		7A41F6F12571C2BF003245A1 /* AccountList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountList.swift; sourceTree = "<group>"; };
 		7A44EFDA2564FB3E00B5DDDC /* TagList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagList.swift; sourceTree = "<group>"; };
 		7A564E4D2566398A007A9DC1 /* TransactionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionList.swift; sourceTree = "<group>"; };
+		7A57C43225A04C0600898FAB /* TransactionsByRelatedTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsByRelatedTag.swift; sourceTree = "<group>"; };
 		7A58C7D02571D730008D9762 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		7A58C7F5257209DE008D9762 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		7A58C7FF25720CE0008D9762 /* AllTagsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTagsList.swift; sourceTree = "<group>"; };
@@ -206,10 +214,10 @@
 		7A1A90C32567375E00C2CB4F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				7AA3F2E8259FEDE800642ABB /* Tag Interface */,
 				7A0E3CD325933A6B00A8BB69 /* ModelData.swift */,
 				7A6DF9382578D61300E46D6D /* SearchBar.swift */,
 				7A1AE7152567BB7C00E19442 /* GIFImage.swift */,
+				7A3066DA25A44611006CEA6F /* TextLimiter.swift */,
 				7A6DF95B25799D3A00E46D6D /* Types */,
 			);
 			path = Models;
@@ -262,6 +270,7 @@
 				7A7CBC9A259DCDDB00CC43CC /* TransactionsByCategory.swift */,
 				7A7CBCA1259DE21C00CC43CC /* TransactionsByAccount.swift */,
 				7A86CC4C259FE4D500E2C4EF /* TransactionsByRelatedAccount.swift */,
+				7A57C43225A04C0600898FAB /* TransactionsByRelatedTag.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -312,13 +321,6 @@
 				7AA23CF625672E0300A30143 /* CircularStd-Bold.otf */,
 			);
 			path = Fonts;
-			sourceTree = "<group>";
-		};
-		7AA3F2E8259FEDE800642ABB /* Tag Interface */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Tag Interface";
 			sourceTree = "<group>";
 		};
 		7AF8995025690AF3002CD306 /* tvOS */ = {
@@ -488,6 +490,7 @@
 			files = (
 				7A44EFDB2564FB3E00B5DDDC /* TagList.swift in Sources */,
 				7A1A90E42567538600C2CB4F /* About.swift in Sources */,
+				7A57C43325A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */,
 				7A0E3CD425933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486625949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D12571D730008D9762 /* Category.swift in Sources */,
@@ -506,6 +509,7 @@
 				7AFA3A41259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B6259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A1AE7162567BB7C00E19442 /* GIFImage.swift in Sources */,
+				7A3066DB25A44611006CEA6F /* TextLimiter.swift in Sources */,
 				7A7CBCA2259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7A41F6E82571B78A003245A1 /* Account.swift in Sources */,
 				7A58C80025720CE0008D9762 /* AllTagsList.swift in Sources */,
@@ -522,6 +526,7 @@
 			files = (
 				7A44EFDC2564FB3E00B5DDDC /* TagList.swift in Sources */,
 				7A9D6DB72568B6B00027389B /* GIFImage.swift in Sources */,
+				7A57C43425A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */,
 				7A0E3CE22593523F00A8BB69 /* ContentView.swift in Sources */,
 				7A17486725949ACC00C92182 /* Settings.swift in Sources */,
 				7A0E3CD525933A6B00A8BB69 /* ModelData.swift in Sources */,
@@ -540,6 +545,7 @@
 				7AFA3A42259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B7259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7A41F6E92571B78A003245A1 /* Account.swift in Sources */,
+				7A3066DC25A44611006CEA6F /* TextLimiter.swift in Sources */,
 				7A7CBCA3259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7A58C80125720CE0008D9762 /* AllTagsList.swift in Sources */,
 				7AC5B2952564D9E000F81928 /* TransactionView.swift in Sources */,
@@ -556,6 +562,7 @@
 			files = (
 				7AF8998525690B50002CD306 /* Transaction.swift in Sources */,
 				7A0E3CE32593523F00A8BB69 /* ContentView.swift in Sources */,
+				7A57C43525A04C0600898FAB /* TransactionsByRelatedTag.swift in Sources */,
 				7A0E3CD625933A6B00A8BB69 /* ModelData.swift in Sources */,
 				7A17486825949ACC00C92182 /* Settings.swift in Sources */,
 				7A58C7D32571D730008D9762 /* Category.swift in Sources */,
@@ -574,6 +581,7 @@
 				7AFA3A43259D8DCD00B18780 /* AllTagsRow.swift in Sources */,
 				7A29F8B8259BFE7800E742E0 /* AccountRow.swift in Sources */,
 				7AF8996C25690B38002CD306 /* TransactionList.swift in Sources */,
+				7A3066DD25A44611006CEA6F /* TextLimiter.swift in Sources */,
 				7A7CBCA4259DE21C00CC43CC /* TransactionsByAccount.swift in Sources */,
 				7AF8998725690B50002CD306 /* GIFImage.swift in Sources */,
 				7A58C80225720CE0008D9762 /* AllTagsList.swift in Sources */,
@@ -716,7 +724,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -739,7 +747,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -767,7 +775,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -793,7 +801,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -814,7 +822,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;
@@ -837,7 +845,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;

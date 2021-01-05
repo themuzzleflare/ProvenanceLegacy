@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TransactionList: View {
-    @EnvironmentObject var modelData: ModelData
+    var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
@@ -16,6 +16,10 @@ struct TransactionList: View {
 
     @State private var filter = FilterCategory.all
     @State private var selectedTransaction: TransactionResource?
+
+    var index: Int? {
+        modelData.transactions.firstIndex(where: { $0.id == selectedTransaction?.id })
+    }
 
     private enum FilterCategory: String, CaseIterable, Identifiable {
         case all = "All"
@@ -191,10 +195,11 @@ struct TransactionList: View {
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
             } else if !modelData.transactionsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
                     Text(modelData.transactionsError)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -203,6 +208,7 @@ struct TransactionList: View {
                 }
                 .padding()
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
@@ -210,7 +216,7 @@ struct TransactionList: View {
                 ForEach(modelData.transactionsErrorResponse, id: \.self) { apiError in
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
                             .foregroundColor(.red)
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
@@ -225,6 +231,7 @@ struct TransactionList: View {
                     .padding()
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
@@ -257,12 +264,18 @@ struct TransactionList: View {
                         }
                     }
                     if filteredTransactionsWithSearch.count != 0 {
-                        Section(header: Text(pageName)) {
+                        Section(header: Text(pageName)
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactionsWithSearch) { transaction in
-                                NavigationLink(destination: TransactionView(transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
-                                        .tag(transaction)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = transaction.attributes.description
+                                    })
+                                }
+                                .tag(transaction)
                             }
                         }
                     }
@@ -287,6 +300,7 @@ struct TransactionList: View {
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
+                                            .font(.custom("CircularStd-Book", size: 17))
                                         if !modelData.loadMoreTransactionsError.isEmpty {
                                             Text(modelData.loadMoreTransactionsError)
                                                 .font(.caption)
@@ -299,6 +313,7 @@ struct TransactionList: View {
                     }
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }

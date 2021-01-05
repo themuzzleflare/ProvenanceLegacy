@@ -6,6 +6,12 @@ import Network
 final class ModelData: ObservableObject {
     @Published var connectivity: Bool = true
 
+    @Published var showingSettings: Bool = false
+
+    @Published var showingAddForm: Bool = false
+
+    @Published var showingAccountInfo: Bool = false
+
     @Published var transactions = [TransactionResource]()
     @Published var transactionsErrorResponse = [ErrorObject]()
     @Published var transactionsError: String = ""
@@ -37,11 +43,10 @@ final class ModelData: ObservableObject {
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "Monitor")
 
-    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-    let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String
-    let appDisplayName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
-    let appCopyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Provenance"
+    let appCopyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "Copyright © 2020 Paul Tavitian"
 }
 
 // MARK: - GIF Images

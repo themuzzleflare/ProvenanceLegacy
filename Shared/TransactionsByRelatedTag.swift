@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct TransactionsByTag: View {
-    @State private var transactionsByTagData = [TransactionResource]()
-    @State private var transactionsByTagPagination = Pagination()
-    @State private var transactionsByTagError: String = ""
-    @State private var transactionsByTagStatusCode: Int = 0
-    @State private var loadMoreTransactionsByTagError: String = ""
+struct TransactionsByRelatedTag: View {
+    @State private var transactionsByRelatedTagData = [TransactionResource]()
+    @State private var transactionsByRelatedTagPagination = Pagination()
+    @State private var transactionsByRelatedTagError: String = ""
+    @State private var transactionsByRelatedTagStatusCode: Int = 0
+    @State private var loadMoreTransactionsByRelatedTagError: String = ""
 
     @State private var showingFailAlert = false
 
@@ -20,7 +20,7 @@ struct TransactionsByTag: View {
     @State private var loading = false
 
     @State private var searchText: String = ""
-    
+
     private var pageName: String {
         return tag
     }
@@ -33,14 +33,14 @@ struct TransactionsByTag: View {
     }
 
     private var searchPlaceholder: String {
-        switch transactionsByTagData.count {
+        switch transactionsByRelatedTagData.count {
             case 1: return "Search 1 Transaction"
-            default: return "Search \(transactionsByTagData.count) Transactions"
+            default: return "Search \(transactionsByRelatedTagData.count) Transactions"
         }
     }
 
     private var filteredTransactions: [TransactionResource] {
-        transactionsByTagData.filter { transaction in
+        transactionsByRelatedTagData.filter { transaction in
             searchText.isEmpty || transaction.attributes.description.localizedStandardContains(searchText)
         }
     }
@@ -50,7 +50,7 @@ struct TransactionsByTag: View {
 
     var body: some View {
         Group {
-            if transactionsByTagData.isEmpty && transactionsByTagError.isEmpty && transactionsByTagStatusCode == 0 {
+            if transactionsByRelatedTagData.isEmpty && transactionsByRelatedTagError.isEmpty && transactionsByRelatedTagStatusCode == 0 {
                 ProgressView {
                     Text("Fetching Transactions...")
                         .font(.custom("CircularStd-Book", size: 17))
@@ -59,12 +59,12 @@ struct TransactionsByTag: View {
                 .onAppear {
                     listTransactionsByTag(tag)
                 }
-            } else if !transactionsByTagError.isEmpty {
+            } else if !transactionsByRelatedTagError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
                         .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
-                    Text(transactionsByTagError)
+                    Text(transactionsByRelatedTagError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
                         .opacity(0.65)
@@ -87,11 +87,6 @@ struct TransactionsByTag: View {
                                     Button("Copy", action: {
                                         UIPasteboard.general.string = transaction.attributes.description
                                     })
-                                    Button(action: {
-                                        deleteTag(transaction)
-                                    }) {
-                                        Label("Remove from Transaction", systemImage: "trash")
-                                    }
                                 }
                                 .tag(transaction)
                             }
@@ -102,25 +97,25 @@ struct TransactionsByTag: View {
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
                     }
-                    if transactionsByTagPagination.next != nil {
+                    if transactionsByRelatedTagPagination.next != nil {
                         Section {
                             if loading == true {
                                 ProgressView()
                             } else {
                                 Button(action: {
                                     DispatchQueue.main.async {
-                                        if !loadMoreTransactionsByTagError.isEmpty {
-                                            loadMoreTransactionsByTagError = ""
+                                        if !loadMoreTransactionsByRelatedTagError.isEmpty {
+                                            loadMoreTransactionsByRelatedTagError = ""
                                         }
                                         loading.toggle()
-                                        nextPage(transactionsByTagPagination.next!)
+                                        nextPage(transactionsByRelatedTagPagination.next!)
                                     }
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
                                             .font(.custom("CircularStd-Book", size: 17))
-                                        if !loadMoreTransactionsByTagError.isEmpty {
-                                            Text(loadMoreTransactionsByTagError)
+                                        if !loadMoreTransactionsByRelatedTagError.isEmpty {
+                                            Text(loadMoreTransactionsByRelatedTagError)
                                                 .font(.caption)
                                                 .opacity(0.65)
                                         }
@@ -132,65 +127,18 @@ struct TransactionsByTag: View {
                 }
                 .navigationTitle(pageName)
                 .listStyle(GroupedListStyle())
-                .alert(isPresented: $showingFailAlert) {
-                    Alert(title: Text("Failed"), message: Text("The tag was not removed from the transaction."), dismissButton: .default(Text("Dismiss")))
-                }
             }
         }
         .onDisappear {
             DispatchQueue.main.async {
-                if transactionsByTagStatusCode != 0 {
-                    transactionsByTagStatusCode = 0
+                if transactionsByRelatedTagStatusCode != 0 {
+                    transactionsByRelatedTagStatusCode = 0
                 }
-                if transactionsByTagError != "" {
-                    transactionsByTagError = ""
-                }
-            }
-        }
-    }
-
-    private func deleteTag(_ transaction: TransactionResource) {
-        let url = URL(string: transaction.relationships.tags.links?.`self` ?? "https://api.up.com.au/api/v1/transactions/\(transaction.id)/relationships/tags")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
-        let bodyObject: [String : Any] = [
-            "data": [
-                [
-                    "type": "\(tagName.type)",
-                    "id": "\(tagName.id)"
-                ]
-            ]
-        ]
-        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if (error == nil) {
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                if statusCode != 204 {
-                    DispatchQueue.main.async {
-                        showingFailAlert.toggle()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        transactionsByTagStatusCode = 0
-                        transactionsByTagError = ""
-                        transactionsByTagData = []
-                        listTransactions()
-                        listAccounts()
-                        listTags()
-                        listCategories()
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    showingFailAlert.toggle()
+                if transactionsByRelatedTagError != "" {
+                    transactionsByRelatedTagError = ""
                 }
             }
         }
-        .resume()
     }
 
     private func listTransactionsByTag(_ tag: String) {
@@ -205,36 +153,36 @@ struct TransactionsByTag: View {
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 DispatchQueue.main.async {
-                    transactionsByTagStatusCode = statusCode
+                    transactionsByRelatedTagStatusCode = statusCode
                 }
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByTagError = decodedResponse.errors.first!.detail
+                            transactionsByRelatedTagError = decodedResponse.errors.first!.detail
                         }
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByTagError = "Authorisation Error!"
+                            transactionsByRelatedTagError = "Authorisation Error!"
                         }
                     }
                     print("Transactions Fetch Unsuccessful: HTTP \(statusCode)")
                 } else {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByTagData = decodedResponse.data
-                            transactionsByTagPagination = decodedResponse.links
+                            transactionsByRelatedTagData = decodedResponse.data
+                            transactionsByRelatedTagPagination = decodedResponse.links
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByTagError = "JSON Serialisation failed!"
+                            transactionsByRelatedTagError = "JSON Serialisation failed!"
                         }
                         print("JSON Serialisation failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    transactionsByTagError = error?.localizedDescription ?? "Unknown error."
+                    transactionsByRelatedTagError = error?.localizedDescription ?? "Unknown error."
                 }
                 print(error?.localizedDescription ?? "Unknown error.")
             }
@@ -254,32 +202,32 @@ struct TransactionsByTag: View {
                 if statusCode == 401 {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByTagError = decodedResponse.errors.first!.detail
+                            loadMoreTransactionsByRelatedTagError = decodedResponse.errors.first!.detail
                             loading.toggle()
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByTagError = "Authorisation Error!"
+                            loadMoreTransactionsByRelatedTagError = "Authorisation Error!"
                             loading.toggle()
                         }
                     }
                 } else {
                     if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
                         DispatchQueue.main.async {
-                            transactionsByTagData.append(contentsOf: decodedResponse.data)
-                            transactionsByTagPagination = decodedResponse.links
+                            transactionsByRelatedTagData.append(contentsOf: decodedResponse.data)
+                            transactionsByRelatedTagPagination = decodedResponse.links
                             loading.toggle()
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByTagError = "JSON Serialisation failed!"
+                            loadMoreTransactionsByRelatedTagError = "JSON Serialisation failed!"
                             loading.toggle()
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    loadMoreTransactionsByTagError = error?.localizedDescription ?? "Unknown error."
+                    loadMoreTransactionsByRelatedTagError = error?.localizedDescription ?? "Unknown error."
                     loading.toggle()
                 }
             }

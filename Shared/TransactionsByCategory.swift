@@ -7,6 +7,8 @@ struct TransactionsByCategory: View {
     @State private var transactionsByCategoryStatusCode: Int = 0
     @State private var loadMoreTransactionsByCategoryError: String = ""
 
+    var modelData: ModelData
+
     var categoryName: CategoryResource
 
     private var category: String {
@@ -58,7 +60,7 @@ struct TransactionsByCategory: View {
             } else if !transactionsByCategoryError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
                     Text(transactionsByCategoryError)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -73,11 +75,18 @@ struct TransactionsByCategory: View {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
                     }
                     if filteredTransactions.count != 0 {
-                        Section(header: Text("Transactions")) {
+                        Section(header: Text("Transactions")
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactions) { transaction in
-                                NavigationLink(destination: TransactionView(transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = transaction.attributes.description
+                                    })
+                                }
+                                .tag(transaction)
                             }
                         }
                     }
@@ -102,6 +111,7 @@ struct TransactionsByCategory: View {
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
+                                            .font(.custom("CircularStd-Book", size: 17))
                                         if !loadMoreTransactionsByCategoryError.isEmpty {
                                             Text(loadMoreTransactionsByCategoryError)
                                                 .font(.caption)

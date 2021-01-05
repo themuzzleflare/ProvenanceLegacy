@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct Settings: View {
+    var modelData: ModelData
+
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
 
@@ -21,11 +23,11 @@ struct Settings: View {
                     NavigationLink(destination: APIKeyEditor()) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("API Key")
-                                .font(.custom("CircularStd-Bold", size: 17))
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
                             Spacer()
                             Text(apiKeyCellValue)
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
                                 .multilineTextAlignment(.trailing)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
@@ -36,6 +38,11 @@ struct Settings: View {
             .listStyle(GroupedListStyle())
             .navigationTitle(pageName)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Close", action: {
+                    modelData.showingSettings.toggle()
+                })
+            }
         }
     }
 }
@@ -60,10 +67,10 @@ struct APIKeyEditor: View {
                     self.isEditing = isEditing
                 } onCommit: {
                     DispatchQueue.main.async {
-                        if tokenString != apiToken {
+                        if tokenString != apiToken && !tokenString.isEmpty {
                             self.showingAlert.toggle()
+                            apiToken = tokenString
                         }
-                        apiToken = tokenString
                     }
                 }
                 .autocapitalization(.none)

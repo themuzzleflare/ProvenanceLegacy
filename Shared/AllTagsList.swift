@@ -24,6 +24,16 @@ struct AllTagsList: View {
         }
     }
 
+    private var addButton: some View {
+        Button(action: {
+            modelData.showingAddForm.toggle()
+        }) {
+            Image(systemName: "plus.circle")
+                .imageScale(.large)
+                .accessibilityLabel("Add")
+        }
+    }
+
     private var refreshButton: some View {
         Button(action: {
             DispatchQueue.main.async {
@@ -92,13 +102,23 @@ struct AllTagsList: View {
                     Text("Fetching \(pageName)...")
                         .font(.custom("CircularStd-Book", size: 17))
                 }
+                .onAppear {
+                    if modelData.showingAddForm {
+                        DispatchQueue.main.async {
+                            listAccounts()
+                            listTransactions()
+                            listCategories()
+                            listTags()
+                        }
+                    }
+                }
                 .navigationTitle(pageName)
                 .navigationBarTitleDisplayMode(.inline)
             } else if !modelData.tagsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
                         .foregroundColor(.red)
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                     Text(modelData.tagsError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
@@ -115,7 +135,7 @@ struct AllTagsList: View {
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
                             .foregroundColor(.red)
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
@@ -139,12 +159,18 @@ struct AllTagsList: View {
                         SearchBar(text: $searchText, placeholder: "Search \(modelData.tags.count) \(pageName)")
                     }
                     if filteredTags.count != 0 {
-                        Section(header: Text(pageName)) {
+                        Section(header: Text(pageName)
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTags) { tag in
-                                NavigationLink(destination: TransactionsByTag(tagName: tag)) {
+                                NavigationLink(destination: TransactionsByTag(modelData: modelData, tagName: tag)) {
                                     AllTagsRow(tag: tag)
-                                        .tag(tag)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = tag.id
+                                    })
+                                }
+                                .tag(tag)
                             }
                         }
                     }
@@ -157,8 +183,12 @@ struct AllTagsList: View {
                 .navigationTitle(pageName)
                 .navigationBarTitleDisplayMode(.inline)
                 .listStyle(GroupedListStyle())
+                .navigationBarItems(leading: addButton)
                 .toolbar {
                     refreshButton
+                }
+                .sheet(isPresented: $modelData.showingAddForm) {
+                    AddTagForm(modelData: modelData)
                 }
             }
         }
@@ -358,3 +388,276 @@ struct AllTagsList: View {
         .resume()
     }
 }
+
+struct AddTagForm: View {
+    var modelData: ModelData
+
+    @AppStorage("Settings.apiToken")
+    private var apiToken: String = ""
+
+    @State private var loading: Bool = false
+
+    var body: some View {
+        NavigationView {
+            List {
+                if modelData.transactions.count != 0 {
+                    Section(header: Text("Transactions")
+                                .font(.custom("CircularStd-Book", size: 12))) {
+                        ForEach(modelData.transactions) { transaction in
+                            NavigationLink(destination: AddTagFormStep2(modelData: modelData, transaction: transaction)) {
+                                TransactionRow(transaction: transaction)
+                            }
+                            .tag(transaction)
+                        }
+                    }
+                    if modelData.transactionsPagination.next != nil {
+                        Section {
+                            if loading == true {
+                                ProgressView()
+                            } else {
+                                Button(action: {
+                                    DispatchQueue.main.async {
+                                        if !modelData.loadMoreTransactionsError.isEmpty {
+                                            modelData.loadMoreTransactionsError = ""
+                                        }
+                                        loading.toggle()
+                                        nextPage(modelData.transactionsPagination.next!)
+                                    }
+                                }) {
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Text("Load More")
+                                            .font(.custom("CircularStd-Book", size: 17))
+                                        if !modelData.loadMoreTransactionsError.isEmpty {
+                                            Text(modelData.loadMoreTransactionsError)
+                                                .font(.caption)
+                                                .opacity(0.65)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Text("You don't have any transactions to add tags to. As such, you are unable to proceed.")
+                        .font(.custom("CircularStd-Book", size: 17))
+                }
+            }
+            .listStyle(GroupedListStyle())
+            .navigationTitle("Select Transaction")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Close", action: {
+                    modelData.showingAddForm.toggle()
+                })
+            }
+        }
+    }
+
+    private func nextPage(_ paginationString: String) {
+        let url = URL(string: paginationString)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if (error == nil) {
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                if statusCode == 401 {
+                    if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
+                        DispatchQueue.main.async {
+                            modelData.loadMoreTransactionsError = decodedResponse.errors.first!.detail
+                            loading.toggle()
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            modelData.loadMoreTransactionsError = "Authorisation Error!"
+                            loading.toggle()
+                        }
+                    }
+                } else {
+                    if let decodedResponse = try? JSONDecoder().decode(Transaction.self, from: data!) {
+                        DispatchQueue.main.async {
+                            modelData.transactions.append(contentsOf: decodedResponse.data)
+                            modelData.transactionsPagination = decodedResponse.links
+                            loading.toggle()
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            modelData.loadMoreTransactionsError = "JSON Serialisation failed!"
+                            loading.toggle()
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    modelData.loadMoreTransactionsError = error?.localizedDescription ?? "Unknown error."
+                    loading.toggle()
+                }
+            }
+        }
+        .resume()
+    }
+}
+
+struct AddTagFormStep2: View {
+    var modelData: ModelData
+
+    var transaction: TransactionResource
+
+    var body: some View {
+        List {
+            if modelData.tags.count != 0 {
+                Section(header: Text("Tags")
+                            .font(.custom("CircularStd-Book", size: 12))) {
+                    ForEach(modelData.tags) { tag in
+                        NavigationLink(destination: AddTagFormStep3(modelData: modelData, transaction: transaction, tag: tag)) {
+                            AllTagsRow(tag: tag)
+                        }
+                        .tag(tag)
+                    }
+                }
+            }
+            Section {
+                NavigationLink(destination: AddTagFormStep3Alt(modelData: modelData, transaction: transaction)) {
+                    Text("New Tag")
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .foregroundColor(.accentColor)
+                }
+            }
+        }
+        .listStyle(GroupedListStyle())
+        .navigationTitle("Select Tag")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct AddTagFormStep3Alt: View {
+    var modelData: ModelData
+    var transaction: TransactionResource
+
+    @State var newTag: String = ""
+
+    @ObservedObject var tagString = TextLimiter(limit: 30)
+    @State private var isEditing = false
+
+    var body: some View {
+        List {
+            TextField("Tag Name", text: $tagString.value) { isEditing in
+                self.isEditing = isEditing
+            } onCommit: {
+                DispatchQueue.main.async {
+                    if !tagString.value.isEmpty {
+                        newTag = tagString.value
+                    }
+                }
+            }
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+        }
+        .listStyle(GroupedListStyle())
+        .navigationTitle("New Tag")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            NavigationLink("Next", destination: AddTagFormStep3(modelData: modelData, transaction: transaction, tag: TagResource.init(type: "tags", id: newTag)))
+                .disabled(newTag.isEmpty || tagString.value != newTag)
+                .tag(newTag)
+        }
+    }
+}
+
+struct AddTagFormStep3: View {
+    var modelData: ModelData
+
+    @State private var showingFailAlert = false
+    @State private var addTagStatusCode: Int = 0
+
+    private var errorAlert: Alert {
+        switch addTagStatusCode {
+            case 403: return Alert(title: Text("Forbidden"), message: Text("Too many tags added to this transaction. Each transaction may have up to 6 tags."), dismissButton: .default(Text("Dismiss")))
+            default: return Alert(title: Text("Failed"), message: Text("The tag was not added to the transaction."), dismissButton: .default(Text("Dismiss")))
+        }
+    }
+
+    @AppStorage("Settings.apiToken")
+    private var apiToken: String = ""
+
+    var transaction: TransactionResource
+    var tag: TagResource
+
+    var body: some View {
+        List {
+            Section(header: Text("Adding Tag")
+                        .font(.custom("CircularStd-Book", size: 12))) {
+                AllTagsRow(tag: tag)
+            }
+            Section(header: Text("To Transaction")
+                        .font(.custom("CircularStd-Book", size: 12))) {
+                TransactionRow(transaction: transaction)
+            }
+            Section(header: Text("Summary")
+                        .font(.custom("CircularStd-Book", size: 12)), footer: Text("No more than 6 tags may be present on any single transaction. Duplicate tags are silently ignored.")
+                            .font(.custom("CircularStd-Book", size: 12))) {
+                Text("You are adding the tag \"\(tag.id)\" to the transaction \"\(transaction.attributes.description)\", which was created on \(transaction.attributes.createdDate).")
+                    .font(.custom("CircularStd-Book", size: 17))
+            }
+        }
+        .listStyle(GroupedListStyle())
+        .navigationTitle("Confirmation")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert(isPresented: $showingFailAlert) {
+            errorAlert
+        }
+        .toolbar {
+            Button("Add", action: {
+                DispatchQueue.main.async {
+                    addTag(transaction, tag: tag)
+                }
+            })
+        }
+    }
+
+    private func addTag(_ transaction: TransactionResource, tag: TagResource) {
+        let url = URL(string: transaction.relationships.tags.links?.`self` ?? "https://api.up.com.au/api/v1/transactions/\(transaction.id)/relationships/tags")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
+
+        let bodyObject: [String : Any] = [
+            "data": [
+                [
+                    "type": "tags",
+                    "id": "\(tag.id)"
+                ]
+            ]
+        ]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if (error == nil) {
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                DispatchQueue.main.async {
+                    addTagStatusCode = statusCode
+                }
+                if statusCode != 204 {
+                    DispatchQueue.main.async {
+                        showingFailAlert.toggle()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        modelData.tagsStatusCode = 0
+                        modelData.tagsError = ""
+                        modelData.tagsErrorResponse = []
+                        modelData.tags = []
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    showingFailAlert.toggle()
+                }
+            }
+        }
+        .resume()
+    }
+}
+

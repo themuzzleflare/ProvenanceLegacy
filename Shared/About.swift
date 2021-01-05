@@ -3,11 +3,9 @@ import SwiftUI
 struct About: View {
     @EnvironmentObject var modelData: ModelData
 
-    @State private var showingSettings = false
-
     private var settingsButton: some View {
         Button(action: {
-            self.showingSettings.toggle()
+            modelData.showingSettings.toggle()
         }) {
             Image(systemName: "gear")
                 .imageScale(.large)
@@ -35,30 +33,44 @@ struct About: View {
                         GIFImage(image: upAnimation)
                             .frame(width: 100, height: 100)
                             .cornerRadius(20)
-                        Text(modelData.appDisplayName ?? modelData.appName ?? "Provenance")
-                            .font(.custom("CircularStd-Bold", size: 34))
+                        Text(modelData.appName)
+                            .font(.custom("CircularStd-Book", size: 34))
                     }
                     .padding(.vertical)
                     HStack(alignment: .center, spacing: 0) {
                         Text("Version")
-                            .font(.custom("CircularStd-Bold", size: 17))
-                        Spacer()
-                        Text(modelData.appVersion ?? "Unknown")
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
+                        Spacer()
+                        Text(modelData.appVersion)
+                            .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
+                    }
+                    .contextMenu {
+                        if modelData.appVersion != "Unknown" {
+                            Button("Copy", action: {
+                                UIPasteboard.general.string = modelData.appVersion
+                            })
+                        }
                     }
                     HStack(alignment: .center, spacing: 0) {
                         Text("Build")
-                            .font(.custom("CircularStd-Bold", size: 17))
-                        Spacer()
-                        Text(modelData.appBuild ?? "Unknown")
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
+                        Spacer()
+                        Text(modelData.appBuild)
+                            .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
                     }
+                    .contextMenu {
+                        if modelData.appBuild != "Unknown" {
+                            Button("Copy", action: {
+                                UIPasteboard.general.string = modelData.appBuild
+                            })
+                        }
+                    }
                 }
-                Section(footer: Text(modelData.appCopyright ?? "Copyright © 2020 Paul Tavitian")
+                Section(footer: Text(modelData.appCopyright)
                             .font(.custom("CircularStd-Book", size: 12))) {
                     Link(destination: URL(string: "mailto:feedback@tavitian.cloud?subject=Feedback%20for%20Provenance")!) {
                         HStack(alignment: .center, spacing: 5) {
@@ -66,7 +78,7 @@ struct About: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                             Text("Contact Developer")
-                                .font(.custom("CircularStd-Bold", size: 17))
+                                .font(.custom("CircularStd-Book", size: 17))
                         }
                     }
                     .disabled(!modelData.connectivity)
@@ -78,8 +90,8 @@ struct About: View {
                 settingsButton
             }
             .listStyle(GroupedListStyle())
-            .sheet(isPresented: $showingSettings) {
-                Settings()
+            .sheet(isPresented: $modelData.showingSettings) {
+                Settings(modelData: modelData)
             }
         }
     }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AccountList: View {
-    @EnvironmentObject var modelData: ModelData
+    var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
@@ -77,6 +77,7 @@ struct AccountList: View {
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
             } else if !modelData.accountsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
@@ -89,6 +90,7 @@ struct AccountList: View {
                 }
                 .padding()
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
@@ -111,19 +113,26 @@ struct AccountList: View {
                     .padding()
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }
             } else {
                 List {
-                    ForEach(modelData.accounts) { account in
-                        NavigationLink(destination: TransactionsByAccount(accountName: account)) {
-                            AccountRow(account: account)
+                    if modelData.accounts.count != 0 {
+                        Section(header: Text(pageName)
+                                    .font(.custom("CircularStd-Book", size: 12))) {
+                            ForEach(modelData.accounts) { account in
+                                NavigationLink(destination: TransactionsByAccount(accountName: account)) {
+                                    AccountRow(account: account)
+                                }
                                 .tag(account)
+                            }
                         }
                     }
                 }
                 .navigationTitle(pageName)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
                 }

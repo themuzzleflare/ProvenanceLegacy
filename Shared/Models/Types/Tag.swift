@@ -8,5 +8,5 @@ struct Tag: Hashable, Codable {
 struct TagResource: Hashable, Codable, Identifiable {
     var type: String
     var id: String
-    var relationships: AccountRelationship
+    var relationships: AccountRelationship?
 }

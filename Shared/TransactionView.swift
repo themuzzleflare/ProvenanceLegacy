@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TransactionView: View {
-    @EnvironmentObject var modelData: ModelData
+    var modelData: ModelData
 
     var transaction: TransactionResource
 
@@ -49,27 +49,27 @@ struct TransactionView: View {
             Section {
                 HStack(alignment: .center, spacing: 5) {
                     Text("Status")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .opacity(0.65)
                     Spacer()
                     Group {
                         Text(statusString)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
                         statusIcon
                             .foregroundColor(statusColour)
                     }
                     .multilineTextAlignment(.trailing)
                 }
                 ForEach(accountFilter) { account in
-                    NavigationLink(destination: TransactionsByRelatedAccount(accountName: account)) {
+                    NavigationLink(destination: TransactionsByRelatedAccount(modelData: modelData, accountName: account)) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Account")
-                                .font(.custom("CircularStd-Bold", size: 17))
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
                             Spacer()
                             Text(account.attributes.displayName)
                                 .font(.custom("CircularStd-Book", size: 17))
                                 .multilineTextAlignment(.trailing)
-                                .opacity(0.65)
                         }
                     }
                 }
@@ -77,33 +77,48 @@ struct TransactionView: View {
             Section {
                 HStack(alignment: .center, spacing: 0) {
                     Text("Description")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .opacity(0.65)
                     Spacer()
                     Text(transaction.attributes.description)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.trailing)
-                        .opacity(0.65)
+                }
+                .contextMenu {
+                    Button("Copy", action: {
+                        UIPasteboard.general.string = transaction.attributes.description
+                    })
                 }
                 if transaction.attributes.rawText != nil {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Raw Text")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(transaction.attributes.rawText!)
                             .font(.custom("Menlo-Regular", size: 17))
                             .multilineTextAlignment(.trailing)
-                            .opacity(0.65)
+                    }
+                    .contextMenu {
+                        Button("Copy", action: {
+                            UIPasteboard.general.string = transaction.attributes.rawText!
+                        })
                     }
                 }
                 if transaction.attributes.message != nil && transaction.attributes.message != "" {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Message")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(transaction.attributes.message!)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
-                            .opacity(0.65)
+                    }
+                    .contextMenu {
+                        Button("Copy", action: {
+                            UIPasteboard.general.string = transaction.attributes.message!
+                        })
                     }
                 }
             }
@@ -112,7 +127,8 @@ struct TransactionView: View {
                     if transaction.attributes.holdInfo!.amount.value != transaction.attributes.amount.value {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Hold \(transaction.attributes.holdInfo!.amount.transType)")
-                                .font(.custom("CircularStd-Bold", size: 17))
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
                             Spacer()
                             Group {
                                 Text(transaction.attributes.holdInfo!.amount.valueSymbol)
@@ -120,7 +136,6 @@ struct TransactionView: View {
                                 Text(" \(transaction.attributes.holdInfo!.amount.currencyCode)")
                             }
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
                             .multilineTextAlignment(.trailing)
                         }
                     }
@@ -128,7 +143,8 @@ struct TransactionView: View {
                         if transaction.attributes.holdInfo!.foreignAmount!.value != transaction.attributes.foreignAmount!.value {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Hold Foreign \(transaction.attributes.holdInfo!.foreignAmount!.transType)")
-                                    .font(.custom("CircularStd-Bold", size: 17))
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .opacity(0.65)
                                 Spacer()
                                 Group {
                                     Text(transaction.attributes.holdInfo!.foreignAmount!.valueSymbol)
@@ -136,7 +152,6 @@ struct TransactionView: View {
                                     Text(" \(transaction.attributes.holdInfo!.foreignAmount!.currencyCode)")
                                 }
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
                                 .multilineTextAlignment(.trailing)
                             }
                         }
@@ -146,7 +161,8 @@ struct TransactionView: View {
                 if transaction.attributes.foreignAmount != nil {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Foreign \(transaction.attributes.foreignAmount!.transType)")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Group {
                             Text(transaction.attributes.foreignAmount!.valueSymbol)
@@ -154,13 +170,13 @@ struct TransactionView: View {
                             Text(" \(transaction.attributes.foreignAmount!.currencyCode)")
                         }
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
                         .multilineTextAlignment(.trailing)
                     }
                 }
                 HStack(alignment: .center, spacing: 0) {
                     Text(transaction.attributes.amount.transType)
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .opacity(0.65)
                     Spacer()
                     Group {
                         Text(transaction.attributes.amount.valueSymbol)
@@ -168,28 +184,27 @@ struct TransactionView: View {
                         Text(" \(transaction.attributes.amount.currencyCode)")
                     }
                     .font(.custom("CircularStd-Book", size: 17))
-                    .opacity(0.65)
                     .multilineTextAlignment(.trailing)
                 }
             }
             Section {
                 HStack(alignment: .center, spacing: 0) {
                     Text("Creation Date")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .opacity(0.65)
                     Spacer()
                     Text(transaction.attributes.createdDate)
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
                         .multilineTextAlignment(.trailing)
                 }
                 if transaction.attributes.settledDate != nil {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Settlement Date")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(transaction.attributes.settledDate!)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -197,50 +212,49 @@ struct TransactionView: View {
             if transaction.relationships.parentCategory.data != nil || transaction.relationships.category.data != nil {
                 Section {
                     if transaction.relationships.parentCategory.data != nil {
-                        ForEach(parentCategoryFilter) { pcategory in
-                            NavigationLink(destination: TransactionsByCategory(categoryName: pcategory)) {
-                                HStack(alignment: .center, spacing: 0) {
-                                    Text("Parent Category")
-                                        .font(.custom("CircularStd-Bold", size: 17))
-                                    Spacer()
-                                    Text(pcategory.attributes.name)
-                                        .font(.custom("CircularStd-Book", size: 17))
-                                        .opacity(0.65)
-                                        .multilineTextAlignment(.trailing)
-                                }
+                        NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: parentCategoryFilter[0])) {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text("Parent Category")
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .opacity(0.65)
+                                Spacer()
+                                Text(parentCategoryFilter[0].attributes.name)
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .multilineTextAlignment(.trailing)
                             }
                         }
+                        .tag(parentCategoryFilter[0])
                     }
                     if transaction.relationships.category.data != nil {
-                        ForEach(categoryFilter) { category in
-                            NavigationLink(destination: TransactionsByCategory(categoryName: category)) {
-                                HStack(alignment: .center, spacing: 0) {
-                                    Text("Category")
-                                        .font(.custom("CircularStd-Bold", size: 17))
-                                    Spacer()
-                                    Text(category.attributes.name)
-                                        .font(.custom("CircularStd-Book", size: 17))
-                                        .opacity(0.65)
-                                        .multilineTextAlignment(.trailing)
-                                }
+                        NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: categoryFilter[0])) {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text("Category")
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .opacity(0.65)
+                                Spacer()
+                                Text(categoryFilter[0].attributes.name)
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .multilineTextAlignment(.trailing)
                             }
                         }
+                        .tag(categoryFilter[0])
                     }
                 }
             }
             Section {
                 if transaction.relationships.tags.data != [] {
-                    NavigationLink(destination: TagList(transaction: transaction)) {
+                    NavigationLink(destination: TagList(modelData: modelData, transaction: transaction)) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Tags")
-                                .font(.custom("CircularStd-Bold", size: 17))
+                                .font(.custom("CircularStd-Book", size: 17))
+                                .opacity(0.65)
                             Spacer()
                             Text(transaction.relationships.tags.data.count.description)
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
                                 .multilineTextAlignment(.trailing)
                         }
                     }
+                    .tag(transaction.relationships.tags.data)
                 }
             }
         }

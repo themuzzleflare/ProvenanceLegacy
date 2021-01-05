@@ -7,7 +7,8 @@ struct TransactionsByAccount: View {
     @State private var transactionsByAccountStatusCode: Int = 0
     @State private var loadMoreTransactionsByAccountError: String = ""
 
-    @State private var showingInfo = false
+    @EnvironmentObject var modelData: ModelData
+
     var accountName: AccountResource
 
     private var account: String {
@@ -16,7 +17,7 @@ struct TransactionsByAccount: View {
 
     private var infoButton: some View {
         Button(action: {
-            self.showingInfo.toggle()
+            modelData.showingAccountInfo.toggle()
         }) {
             Image(systemName: "info.circle")
                 .imageScale(.large)
@@ -69,7 +70,7 @@ struct TransactionsByAccount: View {
             } else if !transactionsByAccountError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
                     Text(transactionsByAccountError)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -84,11 +85,18 @@ struct TransactionsByAccount: View {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
                     }
                     if filteredTransactions.count != 0 {
-                        Section(header: Text("Transactions")) {
+                        Section(header: Text("Transactions")
+                                    .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactions) { transaction in
-                                NavigationLink(destination: TransactionView(transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
+                                .contextMenu {
+                                    Button("Copy", action: {
+                                        UIPasteboard.general.string = transaction.attributes.description
+                                    })
+                                }
+                                .tag(transaction)
                             }
                         }
                     }
@@ -113,6 +121,7 @@ struct TransactionsByAccount: View {
                                 }) {
                                     VStack(alignment: .leading, spacing: 0) {
                                         Text("Load More")
+                                            .font(.custom("CircularStd-Book", size: 17))
                                         if !loadMoreTransactionsByAccountError.isEmpty {
                                             Text(loadMoreTransactionsByAccountError)
                                                 .font(.caption)
@@ -129,8 +138,8 @@ struct TransactionsByAccount: View {
                 .toolbar {
                     infoButton
                 }
-                .sheet(isPresented: $showingInfo) {
-                    AccountInfo(account: accountName, transactionsByAccountData: transactionsByAccountData)
+                .sheet(isPresented: $modelData.showingAccountInfo) {
+                    AccountInfo(modelData: modelData, account: accountName, transactionsByAccountData: transactionsByAccountData)
                 }
             }
         }
@@ -242,6 +251,8 @@ struct TransactionsByAccount: View {
 }
 
 struct AccountInfo: View {
+    var modelData: ModelData
+
     var account: AccountResource
     var transactionsByAccountData: [TransactionResource]
 
@@ -251,7 +262,8 @@ struct AccountInfo: View {
                 Section {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Account Balance")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Group {
                             Text(account.attributes.balance.valueSymbol)
@@ -259,38 +271,37 @@ struct AccountInfo: View {
                             Text(" \(account.attributes.balance.currencyCode)")
                         }
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
                         .multilineTextAlignment(.trailing)
                     }
                 }
                 Section {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Latest Transaction")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(transactionsByAccountData.first?.attributes.rawText ?? transactionsByAccountData.first?.attributes.description ?? "None")
                             .font(.custom(transactionsByAccountData.first?.attributes.rawText != nil ? "Menlo-Regular" : "CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
-                            .opacity(0.65)
                     }
                 }
                 Section {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Account ID")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(account.id)
                             .font(.custom("Menlo-Regular", size: 17))
-                            .opacity(0.65)
                             .multilineTextAlignment(.trailing)
                     }
                     HStack(alignment: .center, spacing: 0) {
                         Text("Creation Date")
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
                         Spacer()
                         Text(account.attributes.createdDate)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -298,6 +309,11 @@ struct AccountInfo: View {
             .listStyle(GroupedListStyle())
             .navigationTitle(account.attributes.displayName)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Close", action: {
+                    modelData.showingAccountInfo.toggle()
+                })
+            }
         }
     }
 }

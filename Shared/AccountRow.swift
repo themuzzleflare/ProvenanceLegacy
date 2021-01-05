@@ -7,7 +7,7 @@ struct AccountRow: View {
         HStack(alignment: .center, spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(account.attributes.displayName)
-                    .font(.custom("CircularStd-Bold", size: 17))
+                    .font(.custom("CircularStd-Book", size: 17))
                 Text(account.attributes.accountType.rawValue.capitalized)
                     .font(.custom("CircularStd-Book", size: 12))
                     .opacity(0.65)
@@ -19,7 +19,6 @@ struct AccountRow: View {
                 Text(" \(account.attributes.balance.currencyCode)")
             }
             .font(.custom("CircularStd-Book", size: 17))
-            .opacity(0.65)
             .multilineTextAlignment(.trailing)
         }
     }
