@@ -5,6 +5,23 @@ struct TransactionView: View {
 
     var transaction: TransactionResource
 
+    @AppStorage("Settings.dateStyle")
+    private var dateStyle: Settings.DateStyle = .absolute
+
+    private var createdDate: String {
+        switch dateStyle {
+            case .absolute: return transaction.attributes.createdDate
+            case .relative: return transaction.attributes.createdDateRelative
+        }
+    }
+
+    private var settledDate: String? {
+        switch dateStyle {
+            case .absolute: return transaction.attributes.settledDate
+            case .relative: return transaction.attributes.settledDateRelative
+        }
+    }
+
     private var statusIcon: Image {
         switch transaction.attributes.isSettled {
             case true: return Image(systemName: "checkmark.circle")
@@ -193,7 +210,7 @@ struct TransactionView: View {
                         .font(.custom("CircularStd-Book", size: 17))
                         .opacity(0.65)
                     Spacer()
-                    Text(transaction.attributes.createdDate)
+                    Text(createdDate)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.trailing)
                 }
@@ -203,7 +220,7 @@ struct TransactionView: View {
                             .font(.custom("CircularStd-Book", size: 17))
                             .opacity(0.65)
                         Spacer()
-                        Text(transaction.attributes.settledDate!)
+                        Text(settledDate!)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
                     }

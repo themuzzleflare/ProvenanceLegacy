@@ -2,13 +2,23 @@ import SwiftUI
 
 struct TransactionRow: View {
     var transaction: TransactionResource
+
+    @AppStorage("Settings.dateStyle")
+    private var dateStyle: Settings.DateStyle = .absolute
+
+    private var createdDate: String {
+        switch dateStyle {
+            case .absolute: return transaction.attributes.createdDate
+            case .relative: return transaction.attributes.createdDateRelative
+        }
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(transaction.attributes.description)
                     .font(.custom("CircularStd-Book", size: 20))
-                Text(transaction.attributes.createdDate)
+                Text(createdDate)
                     .font(.custom("CircularStd-Book", size: 14))
                     .opacity(0.65)
             }

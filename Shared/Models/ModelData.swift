@@ -101,3 +101,27 @@ extension URL {
 extension Color {
     static let rowBackground = Color("RowBackgroundColour")
 }
+// MARK: - Date Formatters
+func formatDate(dateString: String) -> String {
+    if let date = ISO8601DateFormatter().date(from: dateString) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy hh:mm:ss a"
+        dateFormatter.amSymbol = "AM"
+        dateFormatter.pmSymbol = "PM"
+        return dateFormatter.string(from: date)
+    } else {
+        return dateString
+    }
+}
+
+func formatDateRelative(dateString: String) -> String? {
+    if let date = ISO8601DateFormatter().date(from: dateString) {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .positional
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.zeroFormattingBehavior = .pad
+        return "\(formatter.string(from: date.timeIntervalSinceNow)!.replacingOccurrences(of: "-", with: "")) ago"
+    } else {
+        return dateString
+    }
+}

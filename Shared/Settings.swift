@@ -6,12 +6,31 @@ struct Settings: View {
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
 
+    @AppStorage("Settings.dateStyle")
+    private var dateStyle: DateStyle = .absolute
+
+    enum DateStyle: String, CaseIterable, Identifiable {
+        case absolute = "Absolute"
+        case relative = "Relative"
+
+        var id: DateStyle {
+            return self
+        }
+    }
+
     private let pageName: String = "Settings"
 
     private var apiKeyCellValue: String {
         switch apiToken {
             case "": return "None"
             default: return apiToken
+        }
+    }
+
+    private var dateStyleHeaderText: String {
+        switch dateStyle {
+            case .absolute: return "Dates will be displayed as absolute values reflecting the date and time on which a transaction took place.\n\ndd/MM/yyyy hh:mm:ss AM/PM"
+            case .relative: return "Dates will be displayed as relative values reflecting the time interval since a transaction took place.\n\nhh:mm:ss ago"
         }
     }
 
@@ -32,6 +51,25 @@ struct Settings: View {
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                         }
+                    }
+                }
+                Section(footer: Text("The styling of dates associated with transactions.\n\n\(dateStyleHeaderText)")
+                            .font(.custom("CircularStd-Book", size: 12))) {
+                    HStack(alignment: .center, spacing: 0) {
+                        Picker("Date Style", selection: $dateStyle) {
+                            ForEach(DateStyle.allCases) { style in
+                                Text(style.rawValue)
+                                    .tag(style)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .font(.custom("CircularStd-Book", size: 17))
+                        Spacer()
+                        Text(dateStyle.rawValue)
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .multilineTextAlignment(.trailing)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
                     }
                 }
             }

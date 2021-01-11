@@ -21,15 +21,7 @@ struct AccountAttribute: Hashable, Codable {
 
     private var createdAt: String
     var createdDate: String {
-        if let date = ISO8601DateFormatter().date(from: createdAt) {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/yyyy hh:mm:ss a"
-            dateFormatter.amSymbol = "AM"
-            dateFormatter.pmSymbol = "PM"
-            return dateFormatter.string(from: date)
-        } else {
-            return createdAt
-        }
+        return formatDate(dateString: createdAt)
     }
 
     enum AccountTypeEnum: String, CaseIterable, Codable, Hashable, Identifiable {

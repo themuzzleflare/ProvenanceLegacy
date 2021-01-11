@@ -35,15 +35,15 @@ struct Attribute: Hashable, Codable {
     private var settledAt: String?
     var settledDate: String? {
         if settledAt != nil {
-            if let date = ISO8601DateFormatter().date(from: settledAt!) {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd/MM/yyyy hh:mm:ss a"
-                dateFormatter.amSymbol = "AM"
-                dateFormatter.pmSymbol = "PM"
-                return dateFormatter.string(from: date)
-            } else {
-                return settledAt
-            }
+            return formatDate(dateString: settledAt!)
+        } else {
+            return nil
+        }
+    }
+
+    var settledDateRelative: String? {
+        if settledAt != nil {
+            return formatDateRelative(dateString: settledAt!)
         } else {
             return nil
         }
@@ -51,15 +51,11 @@ struct Attribute: Hashable, Codable {
 
     private var createdAt: String
     var createdDate: String {
-        if let date = ISO8601DateFormatter().date(from: createdAt) {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/yyyy hh:mm:ss a"
-            dateFormatter.amSymbol = "AM"
-            dateFormatter.pmSymbol = "PM"
-            return dateFormatter.string(from: date)
-        } else {
-            return createdAt
-        }
+        return formatDate(dateString: createdAt)
+    }
+
+    var createdDateRelative: String {
+        return formatDateRelative(dateString: createdAt)!
     }
     
     private enum TransactionStatusEnum: String, CaseIterable, Codable, Hashable, Identifiable {
