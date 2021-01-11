@@ -96,7 +96,7 @@ struct TransactionView: View {
                             .opacity(0.65)
                         Spacer()
                         Text(transaction.attributes.rawText!)
-                            .font(.custom("Menlo-Regular", size: 17))
+                            .font(.custom("SFMono-Regular", size: 17))
                             .multilineTextAlignment(.trailing)
                     }
                     .contextMenu {

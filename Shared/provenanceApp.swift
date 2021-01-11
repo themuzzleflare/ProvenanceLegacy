@@ -18,6 +18,13 @@ struct provenanceApp: App {
         }
     }
 
+    private func listAvailableFonts() {
+        for family in UIFont.familyNames.sorted() {
+            let names = UIFont.fontNames(forFamilyName: family)
+            print("Family: \(family) Font names: \(names)")
+        }
+    }
+
     private func checkNetwork() {
         modelData.monitor.pathUpdateHandler = { path in
             if path.status == .satisfied {
@@ -55,7 +62,7 @@ struct provenanceApp: App {
         }
     }
 
-     func listAccounts() {
+    func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
@@ -104,7 +111,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-     func listTransactions() {
+    func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
         url = url.appendingQueryParameters(urlParams)
@@ -153,7 +160,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-     func listCategories() {
+    func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -200,7 +207,7 @@ struct provenanceApp: App {
         .resume()
     }
 
-     func listTags() {
+    func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
         url = url.appendingQueryParameters(urlParams)

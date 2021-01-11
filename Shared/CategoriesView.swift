@@ -121,7 +121,7 @@ struct CategoriesView: View {
                             .multilineTextAlignment(.center)
                             .opacity(0.65)
                         Text(apiError.status)
-                            .font(.custom("Menlo-Regular", size: 11))
+                            .font(.custom("SFMono-Regular", size: 11))
                             .multilineTextAlignment(.center)
                             .opacity(0.45)
                             .padding(.top)

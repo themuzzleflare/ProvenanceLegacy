@@ -281,7 +281,7 @@ struct AccountInfo: View {
                             .opacity(0.65)
                         Spacer()
                         Text(transactionsByAccountData.first?.attributes.rawText ?? transactionsByAccountData.first?.attributes.description ?? "None")
-                            .font(.custom(transactionsByAccountData.first?.attributes.rawText != nil ? "Menlo-Regular" : "CircularStd-Book", size: 17))
+                            .font(.custom(transactionsByAccountData.first?.attributes.rawText != nil ? "SFMono-Regular" : "CircularStd-Book", size: 17))
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -292,7 +292,7 @@ struct AccountInfo: View {
                             .opacity(0.65)
                         Spacer()
                         Text(account.id)
-                            .font(.custom("Menlo-Regular", size: 17))
+                            .font(.custom("SFMono-Regular", size: 17))
                             .multilineTextAlignment(.trailing)
                     }
                     HStack(alignment: .center, spacing: 0) {

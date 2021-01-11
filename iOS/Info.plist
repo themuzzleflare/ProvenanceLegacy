@@ -35,6 +35,7 @@
 	<string>Copyright © 2020 Paul Tavitian</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>SF-Mono-Regular.otf</string>
 		<string>CircularStd-Book.otf</string>
 		<string>CircularStd-BookItalic.ttf</string>
 		<string>CircularStd-Bold.otf</string>
