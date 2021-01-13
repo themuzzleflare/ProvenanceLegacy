@@ -29,8 +29,8 @@ struct Settings: View {
 
     private var dateStyleHeaderText: String {
         switch dateStyle {
-            case .absolute: return "Dates will be displayed as absolute values reflecting the date and time on which a transaction took place.\n\ndd/MM/yyyy hh:mm:ss AM/PM"
-            case .relative: return "Dates will be displayed as relative values reflecting the time interval since a transaction took place.\n\nhh:mm:ss ago"
+            case .absolute: return "Dates will be displayed as absolute values reflecting the date and time on which a transaction took place."
+            case .relative: return "Dates will be displayed as relative values reflecting the time interval since a transaction took place."
         }
     }
 
@@ -56,20 +56,18 @@ struct Settings: View {
                 Section(footer: Text("The styling of dates associated with transactions.\n\n\(dateStyleHeaderText)")
                             .font(.custom("CircularStd-Book", size: 12))) {
                     HStack(alignment: .center, spacing: 0) {
+                        Text("Date Style")
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
+                        Spacer()
                         Picker("Date Style", selection: $dateStyle) {
                             ForEach(DateStyle.allCases) { style in
                                 Text(style.rawValue)
                                     .tag(style)
                             }
                         }
-                        .pickerStyle(MenuPickerStyle())
+                        .pickerStyle(SegmentedPickerStyle())
                         .font(.custom("CircularStd-Book", size: 17))
-                        Spacer()
-                        Text(dateStyle.rawValue)
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .multilineTextAlignment(.trailing)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
                     }
                 }
             }

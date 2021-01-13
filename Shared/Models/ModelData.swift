@@ -117,9 +117,9 @@ func formatDate(dateString: String) -> String {
 func formatDateRelative(dateString: String) -> String? {
     if let date = ISO8601DateFormatter().date(from: dateString) {
         let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .positional
-        formatter.allowedUnits = [.hour, .minute, .second]
-        formatter.zeroFormattingBehavior = .pad
+        formatter.unitsStyle = .short
+        formatter.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour, .minute]
+        formatter.zeroFormattingBehavior = .dropAll
         return "\(formatter.string(from: date.timeIntervalSinceNow)!.replacingOccurrences(of: "-", with: "")) ago"
     } else {
         return dateString

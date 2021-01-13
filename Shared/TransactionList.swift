@@ -248,11 +248,19 @@ struct TransactionList: View {
                             }
                             .pickerStyle(MenuPickerStyle())
                             .font(.custom("CircularStd-Book", size: 17))
+                            .opacity(0.65)
+                            .foregroundColor(.primary)
                             Spacer()
-                            Text(filterRawValueTransformed)
-                                .font(.custom("CircularStd-Book", size: 17))
-                                .multilineTextAlignment(.trailing)
-                                .opacity(0.65)
+                            Picker(filterRawValueTransformed, selection: $filter) {
+                                ForEach(FilterCategory.allCases) { category in
+                                    Text(categoryNameTransformed(category))
+                                        .tag(category)
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(.primary)
                         }
                         Toggle(isOn: $showSettledOnly) {
                             HStack(alignment: .center, spacing: 5) {
@@ -260,6 +268,7 @@ struct TransactionList: View {
                                     .foregroundColor(showSettledOnly == true ? .green : .gray)
                                 Text("Settled only")
                                     .font(.custom("CircularStd-Book", size: 17))
+                                    .opacity(showSettledOnly == true ? 1.0 : 0.65)
                             }
                         }
                     }
