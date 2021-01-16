@@ -46,7 +46,7 @@ final class ModelData: ObservableObject {
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
     let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Provenance"
-    let appCopyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "Copyright © 2020 Paul Tavitian"
+    let appCopyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "Copyright © 2021 Paul Tavitian"
 }
 
 // MARK: - GIF Images
