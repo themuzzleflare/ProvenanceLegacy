@@ -204,7 +204,7 @@ struct TransactionList: View {
                     Text(modelData.transactionsError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .navigationTitle(pageName)
@@ -221,7 +221,7 @@ struct TransactionList: View {
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Text(apiError.status)
                             .font(.custom("SFMono-Regular", size: 11))
                             .multilineTextAlignment(.center)
@@ -248,8 +248,7 @@ struct TransactionList: View {
                             }
                             .pickerStyle(MenuPickerStyle())
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.secondary)
                             Spacer()
                             Picker(filterRawValueTransformed, selection: $filter) {
                                 ForEach(FilterCategory.allCases) { category in
@@ -265,10 +264,10 @@ struct TransactionList: View {
                         Toggle(isOn: $showSettledOnly) {
                             HStack(alignment: .center, spacing: 5) {
                                 Image(systemName: "checkmark.circle")
-                                    .foregroundColor(showSettledOnly == true ? .green : .gray)
+                                    .foregroundColor(showSettledOnly == true ? .green : .secondary)
                                 Text("Settled only")
                                     .font(.custom("CircularStd-Book", size: 17))
-                                    .opacity(showSettledOnly == true ? 1.0 : 0.65)
+                                    .foregroundColor(showSettledOnly == true ? .primary : .secondary)
                             }
                         }
                     }
@@ -291,7 +290,7 @@ struct TransactionList: View {
                     Section {
                         Text(bottomText)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                     }
                     if modelData.transactionsPagination.next != nil {
                         Section {
@@ -312,8 +311,8 @@ struct TransactionList: View {
                                             .font(.custom("CircularStd-Book", size: 17))
                                         if !modelData.loadMoreTransactionsError.isEmpty {
                                             Text(modelData.loadMoreTransactionsError)
-                                                .font(.caption)
-                                                .opacity(0.65)
+                                                .font(.custom("CircularStd-Book", size: 11))
+                                                .foregroundColor(.secondary)
                                         }
                                     }
                                 }

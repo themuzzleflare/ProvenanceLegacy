@@ -10,7 +10,7 @@ struct AccountRow: View {
                     .font(.custom("CircularStd-Book", size: 17))
                 Text(account.attributes.accountType.rawValue.capitalized)
                     .font(.custom("CircularStd-Book", size: 12))
-                    .opacity(0.65)
+                    .foregroundColor(.secondary)
             }
             Spacer()
             Group {

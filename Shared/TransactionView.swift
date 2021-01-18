@@ -67,7 +67,7 @@ struct TransactionView: View {
                 HStack(alignment: .center, spacing: 5) {
                     Text("Status")
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Group {
                         Text(statusString)
@@ -82,7 +82,7 @@ struct TransactionView: View {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Account")
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
+                                .foregroundColor(.secondary)
                             Spacer()
                             Text(account.attributes.displayName)
                                 .font(.custom("CircularStd-Book", size: 17))
@@ -95,7 +95,7 @@ struct TransactionView: View {
                 HStack(alignment: .center, spacing: 0) {
                     Text("Description")
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Text(transaction.attributes.description)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -110,7 +110,7 @@ struct TransactionView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Raw Text")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(transaction.attributes.rawText!)
                             .font(.custom("SFMono-Regular", size: 17))
@@ -126,7 +126,7 @@ struct TransactionView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Message")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(transaction.attributes.message!)
                             .font(.custom("CircularStd-Book", size: 17))
@@ -145,7 +145,7 @@ struct TransactionView: View {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Hold \(transaction.attributes.holdInfo!.amount.transType)")
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
+                                .foregroundColor(.secondary)
                             Spacer()
                             Group {
                                 Text(transaction.attributes.holdInfo!.amount.valueSymbol)
@@ -161,7 +161,7 @@ struct TransactionView: View {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Hold Foreign \(transaction.attributes.holdInfo!.foreignAmount!.transType)")
                                     .font(.custom("CircularStd-Book", size: 17))
-                                    .opacity(0.65)
+                                    .foregroundColor(.secondary)
                                 Spacer()
                                 Group {
                                     Text(transaction.attributes.holdInfo!.foreignAmount!.valueSymbol)
@@ -179,7 +179,7 @@ struct TransactionView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Foreign \(transaction.attributes.foreignAmount!.transType)")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Group {
                             Text(transaction.attributes.foreignAmount!.valueSymbol)
@@ -193,7 +193,7 @@ struct TransactionView: View {
                 HStack(alignment: .center, spacing: 0) {
                     Text(transaction.attributes.amount.transType)
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Group {
                         Text(transaction.attributes.amount.valueSymbol)
@@ -208,7 +208,7 @@ struct TransactionView: View {
                 HStack(alignment: .center, spacing: 0) {
                     Text("Creation Date")
                         .font(.custom("CircularStd-Book", size: 17))
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                     Spacer()
                     Text(createdDate)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -218,7 +218,7 @@ struct TransactionView: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Settlement Date")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(settledDate!)
                             .font(.custom("CircularStd-Book", size: 17))
@@ -233,7 +233,7 @@ struct TransactionView: View {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Parent Category")
                                     .font(.custom("CircularStd-Book", size: 17))
-                                    .opacity(0.65)
+                                    .foregroundColor(.secondary)
                                 Spacer()
                                 Text(parentCategoryFilter[0].attributes.name)
                                     .font(.custom("CircularStd-Book", size: 17))
@@ -247,7 +247,7 @@ struct TransactionView: View {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Category")
                                     .font(.custom("CircularStd-Book", size: 17))
-                                    .opacity(0.65)
+                                    .foregroundColor(.secondary)
                                 Spacer()
                                 Text(categoryFilter[0].attributes.name)
                                     .font(.custom("CircularStd-Book", size: 17))
@@ -264,7 +264,7 @@ struct TransactionView: View {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Tags")
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
+                                .foregroundColor(.secondary)
                             Spacer()
                             Text(transaction.relationships.tags.data.count.description)
                                 .font(.custom("CircularStd-Book", size: 17))

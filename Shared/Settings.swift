@@ -43,7 +43,7 @@ struct Settings: View {
                         HStack(alignment: .center, spacing: 0) {
                             Text("API Key")
                                 .font(.custom("CircularStd-Book", size: 17))
-                                .opacity(0.65)
+                                .foregroundColor(.secondary)
                             Spacer()
                             Text(apiKeyCellValue)
                                 .font(.custom("CircularStd-Book", size: 17))
@@ -58,7 +58,7 @@ struct Settings: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Date Style")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Picker("Date Style", selection: $dateStyle) {
                             ForEach(DateStyle.allCases) { style in

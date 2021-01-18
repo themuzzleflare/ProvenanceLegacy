@@ -86,7 +86,7 @@ struct AccountList: View {
                     Text(modelData.accountsError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .navigationTitle(pageName)
@@ -103,7 +103,7 @@ struct AccountList: View {
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Text(apiError.status)
                             .font(.custom("SFMono-Regular", size: 11))
                             .multilineTextAlignment(.center)

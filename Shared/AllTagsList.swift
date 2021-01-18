@@ -122,7 +122,7 @@ struct AllTagsList: View {
                     Text(modelData.tagsError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .navigationTitle(pageName)
@@ -139,7 +139,7 @@ struct AllTagsList: View {
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))
                             .multilineTextAlignment(.center)
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Text(apiError.status)
                             .font(.custom("SFMono-Regular", size: 11))
                             .multilineTextAlignment(.center)
@@ -177,7 +177,7 @@ struct AllTagsList: View {
                     Section {
                         Text(bottomText)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                     }
                 }
                 .navigationTitle(pageName)
@@ -430,7 +430,7 @@ struct AddTagForm: View {
                                         if !modelData.loadMoreTransactionsError.isEmpty {
                                             Text(modelData.loadMoreTransactionsError)
                                                 .font(.caption)
-                                                .opacity(0.65)
+                                                .foregroundColor(.secondary)
                                         }
                                     }
                                 }

@@ -40,7 +40,7 @@ struct About: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Version")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(modelData.appVersion)
                             .font(.custom("CircularStd-Book", size: 17))
@@ -56,7 +56,7 @@ struct About: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Build")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(modelData.appBuild)
                             .font(.custom("CircularStd-Book", size: 17))

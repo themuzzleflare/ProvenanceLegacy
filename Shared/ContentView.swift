@@ -61,7 +61,7 @@ struct ContentView: View {
                 Text("This app requires an active internet connection.")
                     .font(.custom("CircularStd-Book", size: 17))
                     .multilineTextAlignment(.center)
-                    .opacity(0.65)
+                    .foregroundColor(.secondary)
             }
             .padding()
         }

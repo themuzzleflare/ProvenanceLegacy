@@ -75,7 +75,7 @@ struct TransactionsByAccount: View {
                     Text(transactionsByAccountError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .navigationTitle(pageName)
@@ -103,7 +103,7 @@ struct TransactionsByAccount: View {
                     Section {
                         Text(bottomText)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                     }
                     if transactionsByAccountPagination.next != nil {
                         Section {
@@ -124,8 +124,8 @@ struct TransactionsByAccount: View {
                                             .font(.custom("CircularStd-Book", size: 17))
                                         if !loadMoreTransactionsByAccountError.isEmpty {
                                             Text(loadMoreTransactionsByAccountError)
-                                                .font(.caption)
-                                                .opacity(0.65)
+                                                .font(.custom("CircularStd-Book", size: 11))
+                                                .foregroundColor(.secondary)
                                         }
                                     }
                                 }
@@ -263,7 +263,7 @@ struct AccountInfo: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Account Balance")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Group {
                             Text(account.attributes.balance.valueSymbol)
@@ -278,7 +278,7 @@ struct AccountInfo: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Latest Transaction")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(transactionsByAccountData.first?.attributes.rawText ?? transactionsByAccountData.first?.attributes.description ?? "None")
                             .font(.custom(transactionsByAccountData.first?.attributes.rawText != nil ? "SFMono-Regular" : "CircularStd-Book", size: 17))
@@ -289,7 +289,7 @@ struct AccountInfo: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Account ID")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(account.id)
                             .font(.custom("SFMono-Regular", size: 17))
@@ -298,7 +298,7 @@ struct AccountInfo: View {
                     HStack(alignment: .center, spacing: 0) {
                         Text("Creation Date")
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                         Spacer()
                         Text(account.attributes.createdDate)
                             .font(.custom("CircularStd-Book", size: 17))

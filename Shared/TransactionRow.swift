@@ -20,7 +20,7 @@ struct TransactionRow: View {
                     .font(.custom("CircularStd-Book", size: 20))
                 Text(createdDate)
                     .font(.custom("CircularStd-Book", size: 14))
-                    .opacity(0.65)
+                    .foregroundColor(.secondary)
             }
             Spacer()
             Group {

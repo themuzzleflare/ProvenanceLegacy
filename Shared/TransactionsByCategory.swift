@@ -65,7 +65,7 @@ struct TransactionsByCategory: View {
                     Text(transactionsByCategoryError)
                         .font(.custom("CircularStd-Book", size: 17))
                         .multilineTextAlignment(.center)
-                        .opacity(0.65)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .navigationTitle(pageName)
@@ -93,7 +93,7 @@ struct TransactionsByCategory: View {
                     Section {
                         Text(bottomText)
                             .font(.custom("CircularStd-Book", size: 17))
-                            .opacity(0.65)
+                            .foregroundColor(.secondary)
                     }
                     if transactionsByCategoryPagination.next != nil {
                         Section {
@@ -114,8 +114,8 @@ struct TransactionsByCategory: View {
                                             .font(.custom("CircularStd-Book", size: 17))
                                         if !loadMoreTransactionsByCategoryError.isEmpty {
                                             Text(loadMoreTransactionsByCategoryError)
-                                                .font(.caption)
-                                                .opacity(0.65)
+                                                .font(.custom("CircularStd-Book", size: 11))
+                                                .foregroundColor(.secondary)
                                         }
                                     }
                                 }
