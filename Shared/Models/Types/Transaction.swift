@@ -55,7 +55,7 @@ struct Attribute: Hashable, Codable {
     }
 
     var createdDateRelative: String {
-        return formatDateRelative(dateString: createdAt)!
+        return formatDateRelative(dateString: createdAt)
     }
     
     private enum TransactionStatusEnum: String, CaseIterable, Codable, Hashable, Identifiable {

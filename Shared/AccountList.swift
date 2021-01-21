@@ -81,7 +81,7 @@ struct AccountList: View {
             } else if !modelData.accountsError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
                     Text("Error")
-                        .font(.custom("CircularStd-Bold", size: 17))
+                        .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.red)
                     Text(modelData.accountsError)
                         .font(.custom("CircularStd-Book", size: 17))
@@ -98,7 +98,7 @@ struct AccountList: View {
                 ForEach(modelData.accountsErrorResponse, id: \.self) { apiError in
                     VStack(alignment: .center, spacing: 0) {
                         Text(apiError.title)
-                            .font(.custom("CircularStd-Bold", size: 17))
+                            .font(.custom("CircularStd-Book", size: 17))
                             .foregroundColor(.red)
                         Text(apiError.detail)
                             .font(.custom("CircularStd-Book", size: 17))

@@ -114,7 +114,7 @@ func formatDate(dateString: String) -> String {
     }
 }
 
-func formatDateRelative(dateString: String) -> String? {
+func formatDateRelative(dateString: String) -> String {
     if let date = ISO8601DateFormatter().date(from: dateString) {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .short
