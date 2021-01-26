@@ -1,39 +1,39 @@
 import SwiftUI
 
 struct Settings: View {
-    var modelData: ModelData
-
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
-
-    @AppStorage("Settings.dateStyle")
-    private var dateStyle: DateStyle = .absolute
-
+    @EnvironmentObject var modelData: ModelData
+    
+    @Binding var showingSettings: Bool
+    
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    
+    @AppStorage("Settings.dateStyle") private var dateStyle: DateStyle = .absolute
+    
     enum DateStyle: String, CaseIterable, Identifiable {
         case absolute = "Absolute"
         case relative = "Relative"
-
+        
         var id: DateStyle {
             return self
         }
     }
-
+    
     private let pageName: String = "Settings"
-
+    
     private var apiKeyCellValue: String {
         switch apiToken {
             case "": return "None"
             default: return apiToken
         }
     }
-
+    
     private var dateStyleHeaderText: String {
         switch dateStyle {
             case .absolute: return "Dates will be displayed as absolute values reflecting the date and time on which a transaction took place."
             case .relative: return "Dates will be displayed as relative values reflecting the time interval since a transaction took place."
         }
     }
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -76,7 +76,7 @@ struct Settings: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Close", action: {
-                    modelData.showingSettings.toggle()
+                    showingSettings.toggle()
                 })
             }
         }
@@ -87,14 +87,14 @@ struct APIKeyEditor: View {
     @State private var showingAlert = false
     @State private var tokenString: String = ""
     @State private var isEditing = false
-
+    
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
-
+    
     private let pageName: String = "API Key"
-
+    
     var footer: String?
-
+    
     var body: some View {
         List {
             Section(footer: Text(footer ?? "")

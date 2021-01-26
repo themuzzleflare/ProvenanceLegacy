@@ -6,6 +6,8 @@ struct TransactionsByAccount: View {
     @State private var transactionsByAccountError: String = ""
     @State private var transactionsByAccountStatusCode: Int = 0
     @State private var loadMoreTransactionsByAccountError: String = ""
+    
+    @State private var showingAccountInfo: Bool = false
 
     @EnvironmentObject var modelData: ModelData
 
@@ -17,7 +19,7 @@ struct TransactionsByAccount: View {
 
     private var infoButton: some View {
         Button(action: {
-            modelData.showingAccountInfo.toggle()
+            showingAccountInfo.toggle()
         }) {
             Image(systemName: "info.circle")
                 .imageScale(.large)
@@ -138,8 +140,9 @@ struct TransactionsByAccount: View {
                 .toolbar {
                     infoButton
                 }
-                .sheet(isPresented: $modelData.showingAccountInfo) {
-                    AccountInfo(modelData: modelData, account: accountName, transactionsByAccountData: transactionsByAccountData)
+                .sheet(isPresented: $showingAccountInfo) {
+                    AccountInfo(showingAccountInfo: $showingAccountInfo, account: accountName, transactionsByAccountData: transactionsByAccountData)
+                        .environmentObject(modelData)
                 }
             }
         }
@@ -251,7 +254,9 @@ struct TransactionsByAccount: View {
 }
 
 struct AccountInfo: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
+    
+    @Binding var showingAccountInfo: Bool
 
     var account: AccountResource
     var transactionsByAccountData: [TransactionResource]
@@ -311,7 +316,7 @@ struct AccountInfo: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Close", action: {
-                    modelData.showingAccountInfo.toggle()
+                    showingAccountInfo.toggle()
                 })
             }
         }

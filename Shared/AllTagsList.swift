@@ -2,6 +2,8 @@ import SwiftUI
 
 struct AllTagsList: View {
     @EnvironmentObject var modelData: ModelData
+    
+    @State private var showingAddForm: Bool = false
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
@@ -26,7 +28,7 @@ struct AllTagsList: View {
 
     private var addButton: some View {
         Button(action: {
-            modelData.showingAddForm.toggle()
+            showingAddForm.toggle()
         }) {
             Image(systemName: "plus.circle")
                 .imageScale(.large)
@@ -103,7 +105,7 @@ struct AllTagsList: View {
                         .font(.custom("CircularStd-Book", size: 17))
                 }
                 .onAppear {
-                    if modelData.showingAddForm {
+                    if showingAddForm {
                         DispatchQueue.main.async {
                             listAccounts()
                             listTransactions()
@@ -187,8 +189,9 @@ struct AllTagsList: View {
                 .toolbar {
                     refreshButton
                 }
-                .sheet(isPresented: $modelData.showingAddForm) {
-                    AddTagForm(modelData: modelData)
+                .sheet(isPresented: $showingAddForm) {
+                    AddTagForm(showingAddForm: $showingAddForm)
+                        .environmentObject(modelData)
                 }
             }
         }
@@ -390,7 +393,9 @@ struct AllTagsList: View {
 }
 
 struct AddTagForm: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
+    
+    @Binding var showingAddForm: Bool
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
@@ -447,7 +452,7 @@ struct AddTagForm: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Close", action: {
-                    modelData.showingAddForm.toggle()
+                    showingAddForm.toggle()
                 })
             }
         }

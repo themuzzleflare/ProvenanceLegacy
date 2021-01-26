@@ -5,44 +5,38 @@ import Network
 
 final class ModelData: ObservableObject {
     @Published var connectivity: Bool = true
-
-    @Published var showingSettings: Bool = false
-
-    @Published var showingAddForm: Bool = false
-
-    @Published var showingAccountInfo: Bool = false
-
+    
     @Published var transactions = [TransactionResource]()
     @Published var transactionsErrorResponse = [ErrorObject]()
     @Published var transactionsError: String = ""
-
+    
     @Published var transactionsPagination = Pagination()
     @Published var loadMoreTransactionsError: String = ""
     @Published var transactionsStatusCode: Int = 0
-
+    
     @Published var accounts = [AccountResource]()
     @Published var accountsErrorResponse = [ErrorObject]()
     @Published var accountsError: String = ""
-
+    
     @Published var accountsStatusCode: Int = 0
-
+    
     @Published var categories = [CategoryResource]()
     @Published var categoriesErrorResponse = [ErrorObject]()
     @Published var categoriesError: String = ""
-
+    
     @Published var categoriesStatusCode = 0
-
+    
     @Published var tags = [TagResource]()
     @Published var tagsErrorResponse = [ErrorObject]()
     @Published var tagsError: String = ""
-
+    
     @Published var tagsPagination = Pagination()
     @Published var loadMoreTagsError: String = ""
     @Published var tagsStatusCode = 0
-
+    
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "Monitor")
-
+    
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
     let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Provenance"

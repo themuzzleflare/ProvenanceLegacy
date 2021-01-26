@@ -2,10 +2,12 @@ import SwiftUI
 
 struct About: View {
     @EnvironmentObject var modelData: ModelData
+    
+    @State private var showingSettings: Bool = false
 
     private var settingsButton: some View {
         Button(action: {
-            modelData.showingSettings.toggle()
+            showingSettings.toggle()
         }) {
             Image(systemName: "gear")
                 .imageScale(.large)
@@ -90,8 +92,9 @@ struct About: View {
                 settingsButton
             }
             .listStyle(GroupedListStyle())
-            .sheet(isPresented: $modelData.showingSettings) {
-                Settings(modelData: modelData)
+            .sheet(isPresented: $showingSettings) {
+                Settings(showingSettings: $showingSettings)
+                    .environmentObject(modelData)
             }
         }
     }
