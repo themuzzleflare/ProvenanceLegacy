@@ -260,7 +260,7 @@ struct TransactionView: View {
             }
             Section {
                 if transaction.relationships.tags.data != [] {
-                    NavigationLink(destination: TagList(modelData: modelData, transaction: transaction)) {
+                    NavigationLink(destination: TagList(transaction: transaction)) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Tags")
                                 .font(.custom("CircularStd-Book", size: 17))

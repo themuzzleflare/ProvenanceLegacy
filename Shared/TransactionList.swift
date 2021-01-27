@@ -1,26 +1,29 @@
 import SwiftUI
+import SwiftUIRefresh
 
 struct TransactionList: View {
-    var modelData: ModelData
-
+    @EnvironmentObject var modelData: ModelData
+    
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
-
+    
     @State private var searchText: String = ""
-
+    
     @State private var loading: Bool = false
-
+    
     @State private var showSettledOnly = false
-
+    
     @State private var showingInfo = false
-
+    
+    @State private var isShowing: Bool = false
+    
     @State private var filter = FilterCategory.all
     @State private var selectedTransaction: TransactionResource?
-
+    
     var index: Int? {
         modelData.transactions.firstIndex(where: { $0.id == selectedTransaction?.id })
     }
-
+    
     private enum FilterCategory: String, CaseIterable, Identifiable {
         case all = "All"
         case gamesAndSoftware = "games-and-software"
@@ -63,86 +66,90 @@ struct TransactionList: View {
         case tvAndMusic = "tv-and-music"
         case adult = "adult"
         case technology = "technology"
-
+        
         var id: FilterCategory {
             return self
         }
     }
-
+    
     private var filteredTransactions: [TransactionResource] {
         modelData.transactions.filter { transaction in
             (!showSettledOnly || transaction.attributes.isSettled)
                 && (filter == .all || filter.rawValue == transaction.relationships.category.data?.id)
         }
     }
-
+    
     private var filteredTransactionsWithSearch: [TransactionResource] {
         filteredTransactions.filter { transaction in
             searchText.isEmpty || transaction.attributes.description.localizedStandardContains(searchText)
         }
     }
-
+    
+    private func refreshFunction() {
+        DispatchQueue.main.async {
+            modelData.accounts = []
+            modelData.transactions = []
+            modelData.categories = []
+            modelData.tags = []
+            if !modelData.accountsError.isEmpty {
+                modelData.accountsError = ""
+            }
+            if !modelData.transactionsError.isEmpty {
+                modelData.transactionsError = ""
+            }
+            if !modelData.categoriesError.isEmpty {
+                modelData.categoriesError = ""
+            }
+            if !modelData.tagsError.isEmpty {
+                modelData.tagsError = ""
+            }
+            if !modelData.accountsErrorResponse.isEmpty {
+                modelData.accountsErrorResponse = []
+            }
+            if !modelData.transactionsErrorResponse.isEmpty {
+                modelData.transactionsErrorResponse = []
+            }
+            if !modelData.categoriesErrorResponse.isEmpty {
+                modelData.categoriesErrorResponse = []
+            }
+            if !modelData.tagsErrorResponse.isEmpty {
+                modelData.tagsErrorResponse = []
+            }
+            if !modelData.loadMoreTransactionsError.isEmpty {
+                modelData.loadMoreTransactionsError = ""
+            }
+            if !modelData.loadMoreTagsError.isEmpty {
+                modelData.loadMoreTagsError = ""
+            }
+            if modelData.transactionsStatusCode != 0 {
+                modelData.transactionsStatusCode = 0
+            }
+            if modelData.accountsStatusCode != 0 {
+                modelData.accountsStatusCode = 0
+            }
+            if modelData.tagsStatusCode != 0 {
+                modelData.tagsStatusCode = 0
+            }
+            if modelData.categoriesStatusCode != 0 {
+                modelData.categoriesStatusCode = 0
+            }
+        }
+        listAccounts()
+        listTransactions()
+        listCategories()
+        listTags()
+    }
+    
     private var refreshButton: some View {
         Button(action: {
-            DispatchQueue.main.async {
-                modelData.accounts = []
-                modelData.transactions = []
-                modelData.categories = []
-                modelData.tags = []
-                if !modelData.accountsError.isEmpty {
-                    modelData.accountsError = ""
-                }
-                if !modelData.transactionsError.isEmpty {
-                    modelData.transactionsError = ""
-                }
-                if !modelData.categoriesError.isEmpty {
-                    modelData.categoriesError = ""
-                }
-                if !modelData.tagsError.isEmpty {
-                    modelData.tagsError = ""
-                }
-                if !modelData.accountsErrorResponse.isEmpty {
-                    modelData.accountsErrorResponse = []
-                }
-                if !modelData.transactionsErrorResponse.isEmpty {
-                    modelData.transactionsErrorResponse = []
-                }
-                if !modelData.categoriesErrorResponse.isEmpty {
-                    modelData.categoriesErrorResponse = []
-                }
-                if !modelData.tagsErrorResponse.isEmpty {
-                    modelData.tagsErrorResponse = []
-                }
-                if !modelData.loadMoreTransactionsError.isEmpty {
-                    modelData.loadMoreTransactionsError = ""
-                }
-                if !modelData.loadMoreTagsError.isEmpty {
-                    modelData.loadMoreTagsError = ""
-                }
-                if modelData.transactionsStatusCode != 0 {
-                    modelData.transactionsStatusCode = 0
-                }
-                if modelData.accountsStatusCode != 0 {
-                    modelData.accountsStatusCode = 0
-                }
-                if modelData.tagsStatusCode != 0 {
-                    modelData.tagsStatusCode = 0
-                }
-                if modelData.categoriesStatusCode != 0 {
-                    modelData.categoriesStatusCode = 0
-                }
-            }
-            listAccounts()
-            listTransactions()
-            listCategories()
-            listTags()
+            refreshFunction()
         }) {
             Image(systemName: "arrow.clockwise.circle")
                 .imageScale(.large)
                 .accessibilityLabel("Refresh")
         }
     }
-
+    
     private var infoButton: some View {
         Button(action: {
             self.showingInfo.toggle()
@@ -152,21 +159,21 @@ struct TransactionList: View {
                 .accessibilityLabel("Info")
         }
     }
-
+    
     private var bottomText: String {
         switch filteredTransactionsWithSearch.count {
             case 0: return "No \(pageName)"
             default: return "No More \(pageName)"
         }
     }
-
+    
     private var searchPlaceholder: String {
         switch filteredTransactions.count {
             case 1: return "Search 1 Transaction"
             default: return "Search \(filteredTransactions.count) \(pageName)"
         }
     }
-
+    
     private var filterRawValueTransformed: String {
         switch filter {
             case .gamesAndSoftware: return "Apps, Games & Software"
@@ -175,7 +182,7 @@ struct TransactionList: View {
             default: return filter.rawValue.replacingOccurrences(of: "and", with: "&").replacingOccurrences(of: "-", with: " ").capitalized
         }
     }
-
+    
     private func categoryNameTransformed(_ category: FilterCategory) -> String {
         switch category {
             case .gamesAndSoftware: return "Apps, Games & Software"
@@ -184,12 +191,12 @@ struct TransactionList: View {
             default: return category.rawValue.replacingOccurrences(of: "and", with: "&").replacingOccurrences(of: "-", with: " ").capitalized
         }
     }
-
+    
     private let pageName: String = "Transactions"
-
+    
     var body: some View {
         NavigationView {
-            if modelData.transactions.isEmpty && modelData.transactionsError.isEmpty && modelData.transactionsErrorResponse.isEmpty && modelData.transactionsStatusCode == 0 {
+            if modelData.transactions.isEmpty && modelData.transactionsError.isEmpty && modelData.transactionsErrorResponse.isEmpty && modelData.transactionsStatusCode == 0 && !self.isShowing {
                 ProgressView {
                     Text("Fetching \(pageName)...")
                         .font(.custom("CircularStd-Book", size: 17))
@@ -316,6 +323,7 @@ struct TransactionList: View {
                                         }
                                     }
                                 }
+                                .disabled(isShowing)
                             }
                         }
                     }
@@ -324,12 +332,18 @@ struct TransactionList: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
+                        .disabled(isShowing)
                 }
                 .listStyle(GroupedListStyle())
+                .pullToRefresh(isShowing: $isShowing) {
+                    DispatchQueue.main.async {
+                        refreshFunction()
+                    }
+                }
             }
         }
     }
-
+    
     private func nextPage(_ paginationString: String) {
         let url = URL(string: paginationString)!
         var request = URLRequest(url: url)
@@ -374,7 +388,7 @@ struct TransactionList: View {
         }
         .resume()
     }
-
+    
     private func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
@@ -383,7 +397,7 @@ struct TransactionList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -423,7 +437,7 @@ struct TransactionList: View {
         }
         .resume()
     }
-
+    
     private func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
@@ -442,10 +456,12 @@ struct TransactionList: View {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
                             modelData.transactionsErrorResponse = decodedResponse.errors
+                            self.isShowing = false
                         }
                     } else {
                         DispatchQueue.main.async {
                             modelData.transactionsError = "Authorisation Error!"
+                            self.isShowing = false
                         }
                     }
                     print("Transactions Fetch Unsuccessful: HTTP \(statusCode)")
@@ -454,11 +470,13 @@ struct TransactionList: View {
                         DispatchQueue.main.async {
                             modelData.transactions = decodedResponse.data
                             modelData.transactionsPagination = decodedResponse.links
+                            self.isShowing = false
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
                             modelData.transactionsError = "JSON Serialisation failed!"
+                            self.isShowing = false
                         }
                         print("JSON Serialisation failed!")
                     }
@@ -466,20 +484,21 @@ struct TransactionList: View {
             } else {
                 DispatchQueue.main.async {
                     modelData.transactionsError = error?.localizedDescription ?? "Unknown error."
+                    self.isShowing = false
                 }
                 print(error?.localizedDescription ?? "Unknown error.")
             }
         }
         .resume()
     }
-
+    
     private func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -519,7 +538,7 @@ struct TransactionList: View {
         }
         .resume()
     }
-
+    
     private func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
@@ -528,7 +547,7 @@ struct TransactionList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode

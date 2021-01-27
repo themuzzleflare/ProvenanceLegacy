@@ -5,8 +5,12 @@ struct Settings: View {
     
     @Binding var showingSettings: Bool
     
-    @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    @Environment(\.editMode) private var editMode
     
+    @State private var apiTokenString: String = ""
+    @State private var dateStyleSelection: DateStyle = .absolute
+    
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
     @AppStorage("Settings.dateStyle") private var dateStyle: DateStyle = .absolute
     
     enum DateStyle: String, CaseIterable, Identifiable {
@@ -18,105 +22,125 @@ struct Settings: View {
         }
     }
     
-    private let pageName: String = "Settings"
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .center, spacing: 0) {
+                if editMode?.wrappedValue == .active {
+                    Button("Cancel") {
+                        apiTokenString = apiToken
+                        dateStyleSelection = dateStyle
+                        editMode?.animation().wrappedValue = .inactive
+                    }
+                    .font(.custom("CircularStd-Book", size: 17))
+                    .padding(.leading)
+                }
+                Spacer()
+                EditButton()
+                    .padding(.trailing)
+                    .font(.custom("CircularStd-Book", size: 17))
+            }
+            .padding(.vertical)
+            .background(Color(.secondarySystemGroupedBackground))
+            if editMode?.wrappedValue == .inactive {
+                SettingsSummary(apiToken: $apiToken, dateStyle: $dateStyle)
+            } else {
+                SettingsEditor(apiTokenString: $apiTokenString, dateStyleSelection: $dateStyleSelection)
+                    .onAppear {
+                        apiTokenString = apiToken
+                        dateStyleSelection = dateStyle
+                    }
+                    .onDisappear {
+                        if showingSettings {
+                            apiToken = apiTokenString
+                            dateStyle = dateStyleSelection
+                        }
+                    }
+            }
+        }
+    }
+}
+
+struct SettingsEditor: View {
+    @Binding var apiTokenString: String
+    @Binding var dateStyleSelection: Settings.DateStyle
     
-    private var apiKeyCellValue: String {
+    var body: some View {
+        List {
+            Section {
+                HStack(alignment: .center) {
+                    Text("API Token")
+                        .foregroundColor(.secondary)
+                        .font(.custom("CircularStd-Book", size: 17))
+                    Divider()
+                    TextField("API Token", text: $apiTokenString)
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .multilineTextAlignment(.trailing)
+                }
+                
+            }
+            Section {
+                HStack(alignment: .center, spacing: 0) {
+                    Text("Date Style")
+                        .foregroundColor(.secondary)
+                        .font(.custom("CircularStd-Book", size: 17))
+                    Spacer()
+                    Picker("Date Style", selection: $dateStyleSelection) {
+                        ForEach(Settings.DateStyle.allCases) { style in
+                            Text(style.rawValue)
+                                .tag(style)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .font(.custom("CircularStd-Book", size: 17))
+                }
+            }
+        }
+        .listStyle(GroupedListStyle())
+    }
+}
+
+struct SettingsSummary: View {
+    @EnvironmentObject var modelData: ModelData
+    
+    @Binding var apiToken: String
+    @Binding var dateStyle: Settings.DateStyle
+    
+    private var apiTokenCellValue: String {
         switch apiToken {
             case "": return "None"
             default: return apiToken
         }
     }
     
-    private var dateStyleHeaderText: String {
-        switch dateStyle {
-            case .absolute: return "Dates will be displayed as absolute values reflecting the date and time on which a transaction took place."
-            case .relative: return "Dates will be displayed as relative values reflecting the time interval since a transaction took place."
-        }
-    }
-    
-    var body: some View {
-        NavigationView {
-            List {
-                Section(footer: Text("The personal access token used to communicate with the Up Banking Developer API.")
-                            .font(.custom("CircularStd-Book", size: 12))) {
-                    NavigationLink(destination: APIKeyEditor()) {
-                        HStack(alignment: .center, spacing: 0) {
-                            Text("API Key")
-                                .font(.custom("CircularStd-Book", size: 17))
-                                .foregroundColor(.secondary)
-                            Spacer()
-                            Text(apiKeyCellValue)
-                                .font(.custom("CircularStd-Book", size: 17))
-                                .multilineTextAlignment(.trailing)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                        }
-                    }
-                }
-                Section(footer: Text("The styling of dates associated with transactions.\n\n\(dateStyleHeaderText)")
-                            .font(.custom("CircularStd-Book", size: 12))) {
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("Date Style")
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Picker("Date Style", selection: $dateStyle) {
-                            ForEach(DateStyle.allCases) { style in
-                                Text(style.rawValue)
-                                    .tag(style)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .font(.custom("CircularStd-Book", size: 17))
-                    }
-                }
-            }
-            .listStyle(GroupedListStyle())
-            .navigationTitle(pageName)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                Button("Close", action: {
-                    showingSettings.toggle()
-                })
-            }
-        }
-    }
-}
-
-struct APIKeyEditor: View {
-    @State private var showingAlert = false
-    @State private var tokenString: String = ""
-    @State private var isEditing = false
-    
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
-    
-    private let pageName: String = "API Key"
-    
-    var footer: String?
-    
     var body: some View {
         List {
-            Section(footer: Text(footer ?? "")
-                        .foregroundColor(.red)) {
-                TextField(pageName, text: $tokenString) { isEditing in
-                    self.isEditing = isEditing
-                } onCommit: {
-                    DispatchQueue.main.async {
-                        if tokenString != apiToken && !tokenString.isEmpty {
-                            self.showingAlert.toggle()
-                            apiToken = tokenString
-                        }
-                    }
+            Section {
+                HStack(alignment: .center, spacing: 0) {
+                    Text("API Token")
+                        .foregroundColor(.secondary)
+                        .font(.custom("CircularStd-Book", size: 17))
+                    Spacer()
+                    Text(apiTokenCellValue)
+                        .multilineTextAlignment(.trailing)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .font(.custom("CircularStd-Book", size: 17))
                 }
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
+            }
+            Section {
+                HStack(alignment: .center, spacing: 0) {
+                    Text("Date Style")
+                        .foregroundColor(.secondary)
+                        .font(.custom("CircularStd-Book", size: 17))
+                    Spacer()
+                    Text(dateStyle.rawValue)
+                        .multilineTextAlignment(.trailing)
+                        .font(.custom("CircularStd-Book", size: 17))
+                }
             }
         }
         .listStyle(GroupedListStyle())
-        .navigationTitle(pageName)
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Success"), message: Text("Successfully changed \(pageName)."), dismissButton: .default(Text("Dismiss")))
-        }
     }
 }

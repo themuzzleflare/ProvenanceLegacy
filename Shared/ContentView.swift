@@ -18,20 +18,13 @@ struct ContentView: View {
     
     var body: some View {
         if modelData.connectivity {
-            if apiToken.isEmpty {
-                NavigationView {
-                    APIKeyEditor(footer: "Required")
-                        .navigationTitle("API Key")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            } else {
                 TabView(selection: $selection) {
-                    TransactionList(modelData: modelData)
+                    TransactionList()
                         .tabItem {
                             Label("Transactions", systemImage: "list.bullet")
                         }
                         .tag(Tab.transactions)
-                    AccountList(modelData: modelData)
+                    AccountList()
                         .tabItem {
                             Label("Accounts", systemImage: "list.bullet.rectangle")
                         }
@@ -41,7 +34,7 @@ struct ContentView: View {
                             Label("Tags", systemImage: "tag")
                         }
                         .tag(Tab.tags)
-                    CategoriesView(modelData: modelData)
+                    CategoriesView()
                         .tabItem {
                             Label("Categories", systemImage: "arrow.up.arrow.down.circle")
                         }
@@ -52,7 +45,6 @@ struct ContentView: View {
                         }
                         .tag(Tab.about)
                 }
-            }
         } else {
             VStack(alignment: .center, spacing: 0) {
                 Text("Error")

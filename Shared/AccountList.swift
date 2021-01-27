@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AccountList: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""

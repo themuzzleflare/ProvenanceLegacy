@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TagList: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
 
     @AppStorage("Settings.apiToken")
     private var apiToken: String = ""
