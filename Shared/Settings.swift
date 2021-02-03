@@ -85,9 +85,7 @@ struct SettingsEditor: View {
                         .font(.custom("CircularStd-Book", size: 17))
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                        .multilineTextAlignment(.trailing)
                 }
-                
             }
             Section {
                 HStack(alignment: .center, spacing: 0) {

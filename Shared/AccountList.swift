@@ -3,8 +3,7 @@ import SwiftUI
 struct AccountList: View {
     @EnvironmentObject var modelData: ModelData
 
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
 
     private let pageName: String = "Accounts"
 

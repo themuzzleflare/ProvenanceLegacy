@@ -15,28 +15,21 @@ struct About: View {
         }
     }
 
-    private var networkConnectivity: Text {
-        switch modelData.connectivity {
-            case true: return Text("You are connected to the Internet.")
-                .foregroundColor(.green)
-            case false: return Text("You are not connected to the Internet.")
-                .foregroundColor(.red)
-        }
-    }
-
     private let pageName: String = "About"
 
     var body: some View {
         NavigationView {
             List {
-                Section(footer: networkConnectivity
-                            .font(.custom("CircularStd-Book", size: 12))) {
+                Section {
                     VStack(spacing: 5) {
                         GIFImage(image: upAnimation)
                             .frame(width: 100, height: 100)
                             .cornerRadius(20)
                         Text(modelData.appName)
                             .font(.custom("CircularStd-Book", size: 34))
+                        Text("Provenance is a lightweight application that interacts with the Up Banking Developer API to display information about your bank accounts, transactions, categories, tags, and more.")
+                            .font(.custom("CircularStd-Book", size: 17))
+                            .foregroundColor(.secondary)
                     }
                     .padding(.vertical)
                     HStack(alignment: .center, spacing: 0) {

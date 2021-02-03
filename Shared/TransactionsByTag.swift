@@ -45,8 +45,7 @@ struct TransactionsByTag: View {
         }
     }
 
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
 
     var body: some View {
         Group {

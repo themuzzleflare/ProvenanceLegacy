@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 import SwiftUI
 import Network
 
@@ -90,10 +89,6 @@ extension URL {
         let URLString : String = String(format: "%@?%@", self.absoluteString, parametersDictionary.queryParameters)
         return URL(string: URLString)!
     }
-}
-// MARK: - Colour Extension
-extension Color {
-    static let rowBackground = Color("RowBackgroundColour")
 }
 // MARK: - Date Formatters
 func formatDate(dateString: String) -> String {

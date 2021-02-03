@@ -487,14 +487,14 @@ struct AddTagForm: View {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            modelData.loadMoreTransactionsError = "JSON Serialisation failed!"
+                            modelData.loadMoreTransactionsError = "JSON Decoding Failed!"
                             loading.toggle()
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.loadMoreTransactionsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.loadMoreTransactionsError = error?.localizedDescription ?? "Unknown Error!"
                     loading.toggle()
                 }
             }
@@ -533,10 +533,11 @@ struct AddTagFormStep2: View {
 
 struct AddTagFormStep3Alt: View {
     @EnvironmentObject var modelData: ModelData
+    
     var transaction: TransactionResource
     
-    @ObservedObject var tagString = TextLimiter(limit: 30)
-    @State private var isEditing = false
+    @ObservedObject private var tagString = TextLimiter(limit: 30)
+    @State private var isEditing: Bool = false
     
     var body: some View {
         List {
