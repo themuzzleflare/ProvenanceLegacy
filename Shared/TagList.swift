@@ -3,8 +3,7 @@ import SwiftUI
 struct TagList: View {
     @EnvironmentObject var modelData: ModelData
 
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
 
     var tagFilter: [TagResource] {
         modelData.tags.filter { tag in
@@ -16,7 +15,7 @@ struct TagList: View {
 
     var body: some View {
         List(tagFilter) { tag in
-            NavigationLink(destination: TransactionsByRelatedTag(modelData: modelData, tagName: tag)) {
+            NavigationLink(destination: TransactionsByRelatedTag(tagName: tag)) {
                 TagRow(tag: tag)
             }
             .contextMenu {

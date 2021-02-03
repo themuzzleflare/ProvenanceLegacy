@@ -1,30 +1,21 @@
 import SwiftUI
-import SwiftUIRefresh
 
 struct TransactionList: View {
     @EnvironmentObject var modelData: ModelData
     
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
     
     @State private var searchText: String = ""
     
     @State private var loading: Bool = false
     
-    @State private var showSettledOnly = false
+    @State private var showSettledOnly: Bool = false
     
-    @State private var showingInfo = false
+    @State private var showingCategoryPicker: Bool = false
     
-    @State private var isShowing: Bool = false
+    @State var filter = FilterCategory.all
     
-    @State private var filter = FilterCategory.all
-    @State private var selectedTransaction: TransactionResource?
-    
-    var index: Int? {
-        modelData.transactions.firstIndex(where: { $0.id == selectedTransaction?.id })
-    }
-    
-    private enum FilterCategory: String, CaseIterable, Identifiable {
+    enum FilterCategory: String, CaseIterable, Identifiable {
         case all = "All"
         case gamesAndSoftware = "games-and-software"
         case carInsuranceAndMaintenance = "car-insurance-and-maintenance"
@@ -150,16 +141,6 @@ struct TransactionList: View {
         }
     }
     
-    private var infoButton: some View {
-        Button(action: {
-            self.showingInfo.toggle()
-        }) {
-            Image(systemName: "info.circle")
-                .imageScale(.large)
-                .accessibilityLabel("Info")
-        }
-    }
-    
     private var bottomText: String {
         switch filteredTransactionsWithSearch.count {
             case 0: return "No \(pageName)"
@@ -174,7 +155,7 @@ struct TransactionList: View {
         }
     }
     
-    private var filterRawValueTransformed: String {
+    var filterRawValueTransformed: String {
         switch filter {
             case .gamesAndSoftware: return "Apps, Games & Software"
             case .carInsuranceAndMaintenance: return "Car Insurance, Rego & Maintenance"
@@ -183,7 +164,7 @@ struct TransactionList: View {
         }
     }
     
-    private func categoryNameTransformed(_ category: FilterCategory) -> String {
+    func categoryNameTransformed(_ category: FilterCategory) -> String {
         switch category {
             case .gamesAndSoftware: return "Apps, Games & Software"
             case .carInsuranceAndMaintenance: return "Car Insurance, Rego & Maintenance"
@@ -196,7 +177,7 @@ struct TransactionList: View {
     
     var body: some View {
         NavigationView {
-            if modelData.transactions.isEmpty && modelData.transactionsError.isEmpty && modelData.transactionsErrorResponse.isEmpty && modelData.transactionsStatusCode == 0 && !self.isShowing {
+            if modelData.transactions.isEmpty && modelData.transactionsError.isEmpty && modelData.transactionsErrorResponse.isEmpty && modelData.transactionsStatusCode == 0 {
                 ProgressView {
                     Text("Fetching \(pageName)...")
                         .font(.custom("CircularStd-Book", size: 17))
@@ -243,36 +224,29 @@ struct TransactionList: View {
                     refreshButton
                 }
             } else {
-                List(selection: $selectedTransaction) {
+                List {
                     Section {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
-                        HStack(alignment: .center, spacing: 0) {
-                            Picker("Category", selection: $filter) {
-                                ForEach(FilterCategory.allCases) { category in
-                                    Text(categoryNameTransformed(category))
-                                        .tag(category)
-                                }
+                            .listRowInsets(EdgeInsets())
+                        Button(action: {
+                            showingCategoryPicker.toggle()
+                        }) {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text("Category")
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(filterRawValueTransformed)
+                                    .font(.custom("CircularStd-Book", size: 17))
+                                    .multilineTextAlignment(.trailing)
+                                    .foregroundColor(.primary)
                             }
-                            .pickerStyle(MenuPickerStyle())
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .foregroundColor(.secondary)
-                            Spacer()
-                            Picker(filterRawValueTransformed, selection: $filter) {
-                                ForEach(FilterCategory.allCases) { category in
-                                    Text(categoryNameTransformed(category))
-                                        .tag(category)
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                            .font(.custom("CircularStd-Book", size: 17))
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(.primary)
                         }
                         Toggle(isOn: $showSettledOnly) {
                             HStack(alignment: .center, spacing: 5) {
                                 Image(systemName: "checkmark.circle")
                                     .foregroundColor(showSettledOnly == true ? .green : .secondary)
-                                Text("Settled only")
+                                Text("Settled Only")
                                     .font(.custom("CircularStd-Book", size: 17))
                                     .foregroundColor(showSettledOnly == true ? .primary : .secondary)
                             }
@@ -282,11 +256,11 @@ struct TransactionList: View {
                         Section(header: Text(pageName)
                                     .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactionsWithSearch) { transaction in
-                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
                                 .contextMenu {
-                                    Button("Copy", action: {
+                                    Button("Copy Description", action: {
                                         UIPasteboard.general.string = transaction.attributes.description
                                     })
                                 }
@@ -323,7 +297,6 @@ struct TransactionList: View {
                                         }
                                     }
                                 }
-                                .disabled(isShowing)
                             }
                         }
                     }
@@ -332,13 +305,11 @@ struct TransactionList: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     refreshButton
-                        .disabled(isShowing)
                 }
                 .listStyle(GroupedListStyle())
-                .pullToRefresh(isShowing: $isShowing) {
-                    DispatchQueue.main.async {
-                        refreshFunction()
-                    }
+                .sheet(isPresented: $showingCategoryPicker) {
+                    CategoryPickerView(showingCategoryPicker: $showingCategoryPicker, filter: $filter)
+                        .environmentObject(modelData)
                 }
             }
         }
@@ -456,12 +427,10 @@ struct TransactionList: View {
                     if let decodedResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data!) {
                         DispatchQueue.main.async {
                             modelData.transactionsErrorResponse = decodedResponse.errors
-                            self.isShowing = false
                         }
                     } else {
                         DispatchQueue.main.async {
                             modelData.transactionsError = "Authorisation Error!"
-                            self.isShowing = false
                         }
                     }
                     print("Transactions Fetch Unsuccessful: HTTP \(statusCode)")
@@ -470,13 +439,11 @@ struct TransactionList: View {
                         DispatchQueue.main.async {
                             modelData.transactions = decodedResponse.data
                             modelData.transactionsPagination = decodedResponse.links
-                            self.isShowing = false
                         }
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
                             modelData.transactionsError = "JSON Serialisation failed!"
-                            self.isShowing = false
                         }
                         print("JSON Serialisation failed!")
                     }
@@ -484,7 +451,6 @@ struct TransactionList: View {
             } else {
                 DispatchQueue.main.async {
                     modelData.transactionsError = error?.localizedDescription ?? "Unknown error."
-                    self.isShowing = false
                 }
                 print(error?.localizedDescription ?? "Unknown error.")
             }
@@ -586,5 +552,29 @@ struct TransactionList: View {
             }
         }
         .resume()
+    }
+}
+
+struct CategoryPickerView: View {
+    @Binding var showingCategoryPicker: Bool
+    @Binding var filter: TransactionList.FilterCategory
+    
+    var body: some View {
+        NavigationView {
+            Picker("Category", selection: $filter) {
+                ForEach(TransactionList.FilterCategory.allCases) { category in
+                    Text(TransactionList().categoryNameTransformed(category))
+                        .tag(category)
+                }
+            }
+            .pickerStyle(WheelPickerStyle())
+            .navigationTitle("Category")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Close", action: {
+                    showingCategoryPicker.toggle()
+                })
+            }
+        }
     }
 }

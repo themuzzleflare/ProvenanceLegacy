@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -96,7 +96,6 @@
 		7AE3B4DA2569E0B400A811B1 /* Up_Logo_Widescreen_Animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7AE3B4D52569E0B300A811B1 /* Up_Logo_Widescreen_Animation.gif */; };
 		7AE3B4DB2569E0B400A811B1 /* Up_Logo_Widescreen_Animation@3x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7AE3B4D62569E0B400A811B1 /* Up_Logo_Widescreen_Animation@3x.gif */; };
 		7AE3B4DC2569E0B400A811B1 /* Up_Logo_Widescreen_Animation@3x.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7AE3B4D62569E0B400A811B1 /* Up_Logo_Widescreen_Animation@3x.gif */; };
-		7AEEDAE825C127A00090F67D /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 7AEEDAE725C127A00090F67D /* SwiftUIRefresh */; };
 		7AF2005C25ABC0A00034005E /* SF-Mono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7AF2005B25ABC0A00034005E /* SF-Mono-Regular.otf */; };
 		7AF2005D25ABC0A00034005E /* SF-Mono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7AF2005B25ABC0A00034005E /* SF-Mono-Regular.otf */; };
 		7AF2005E25ABC0A00034005E /* SF-Mono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7AF2005B25ABC0A00034005E /* SF-Mono-Regular.otf */; };
@@ -183,7 +182,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AEEDAE825C127A00090F67D /* SwiftUIRefresh in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,7 +354,6 @@
 			);
 			name = "Provenance (iOS)";
 			packageProductDependencies = (
-				7AEEDAE725C127A00090F67D /* SwiftUIRefresh */,
 			);
 			productName = "provenance (iOS)";
 			productReference = 7A97047E2564A45400DCF1F7 /* Provenance.app */;
@@ -429,7 +426,6 @@
 			);
 			mainGroup = 7A9704712564A45200DCF1F7;
 			packageReferences = (
-				7AEEDAE625C127A00090F67D /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
 			);
 			productRefGroup = 7A97047F2564A45400DCF1F7 /* Products */;
 			projectDirPath = "";
@@ -736,7 +732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -759,7 +755,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = iphoneos;
@@ -787,7 +783,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -813,7 +809,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = macosx;
@@ -834,7 +830,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;
@@ -857,7 +853,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.tavitian.provenance;
 				PRODUCT_NAME = Provenance;
 				SDKROOT = appletvos;
@@ -908,25 +904,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		7AEEDAE625C127A00090F67D /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/timbersoftware/SwiftUIRefresh.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.3;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		7AEEDAE725C127A00090F67D /* SwiftUIRefresh */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7AEEDAE625C127A00090F67D /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
-			productName = SwiftUIRefresh;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7A9704722564A45200DCF1F7 /* Project object */;
 }

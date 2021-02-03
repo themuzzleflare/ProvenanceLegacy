@@ -9,7 +9,7 @@ struct TransactionsByTag: View {
 
     @State private var showingFailAlert = false
 
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
 
     var tagName: TagResource
 
@@ -75,12 +75,13 @@ struct TransactionsByTag: View {
                 List {
                     Section {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
+                            .listRowInsets(EdgeInsets())
                     }
                     if filteredTransactions.count != 0 {
                         Section(header: Text("Transactions")
                                     .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactions) { transaction in
-                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
                                 .contextMenu {

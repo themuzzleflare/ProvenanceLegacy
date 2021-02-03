@@ -1,12 +1,11 @@
 import SwiftUI
 
 struct TransactionView: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
 
     var transaction: TransactionResource
 
-    @AppStorage("Settings.dateStyle")
-    private var dateStyle: Settings.DateStyle = .absolute
+    @AppStorage("Settings.dateStyle") private var dateStyle: Settings.DateStyle = .absolute
 
     private var createdDate: String {
         switch dateStyle {
@@ -78,7 +77,7 @@ struct TransactionView: View {
                     .multilineTextAlignment(.trailing)
                 }
                 ForEach(accountFilter) { account in
-                    NavigationLink(destination: TransactionsByRelatedAccount(modelData: modelData, accountName: account)) {
+                    NavigationLink(destination: TransactionsByRelatedAccount(accountName: account)) {
                         HStack(alignment: .center, spacing: 0) {
                             Text("Account")
                                 .font(.custom("CircularStd-Book", size: 17))
@@ -229,32 +228,30 @@ struct TransactionView: View {
             if transaction.relationships.parentCategory.data != nil || transaction.relationships.category.data != nil {
                 Section {
                     if transaction.relationships.parentCategory.data != nil {
-                        NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: parentCategoryFilter[0])) {
+                        NavigationLink(destination: TransactionsByCategory(categoryId: parentCategoryFilter.first?.id ?? "", categoryName: parentCategoryFilter.first?.attributes.name ?? "")) {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Parent Category")
                                     .font(.custom("CircularStd-Book", size: 17))
                                     .foregroundColor(.secondary)
                                 Spacer()
-                                Text(parentCategoryFilter[0].attributes.name)
+                                Text(parentCategoryFilter.first?.attributes.name ?? "")
                                     .font(.custom("CircularStd-Book", size: 17))
                                     .multilineTextAlignment(.trailing)
                             }
                         }
-                        .tag(parentCategoryFilter[0])
                     }
                     if transaction.relationships.category.data != nil {
-                        NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: categoryFilter[0])) {
+                        NavigationLink(destination: TransactionsByCategory(categoryId: categoryFilter.first?.id ?? "", categoryName: categoryFilter.first?.attributes.name ?? "")) {
                             HStack(alignment: .center, spacing: 0) {
                                 Text("Category")
                                     .font(.custom("CircularStd-Book", size: 17))
                                     .foregroundColor(.secondary)
                                 Spacer()
-                                Text(categoryFilter[0].attributes.name)
+                                Text(categoryFilter.first?.attributes.name ?? "")
                                     .font(.custom("CircularStd-Book", size: 17))
                                     .multilineTextAlignment(.trailing)
                             }
                         }
-                        .tag(categoryFilter[0])
                     }
                 }
             }

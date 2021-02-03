@@ -5,8 +5,7 @@ struct ContentView: View {
     
     @State private var selection: Tab = .transactions
     
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
     
     enum Tab {
         case transactions

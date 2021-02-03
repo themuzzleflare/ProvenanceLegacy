@@ -24,23 +24,32 @@ struct Settings: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center, spacing: 0) {
-                if editMode?.wrappedValue == .active {
-                    Button("Cancel") {
-                        apiTokenString = apiToken
-                        dateStyleSelection = dateStyle
-                        editMode?.animation().wrappedValue = .inactive
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .center, spacing: 0) {
+                    if editMode?.wrappedValue == .active {
+                        Button("Cancel") {
+                            apiTokenString = apiToken
+                            dateStyleSelection = dateStyle
+                            editMode?.animation().wrappedValue = .inactive
+                        }
+                        .padding(.leading)
+                    } else {
+                        Button("Close", action: {
+                            showingSettings.toggle()
+                        })
+                        .padding(.leading)
                     }
-                    .font(.custom("CircularStd-Book", size: 17))
-                    .padding(.leading)
+                    Spacer()
+                    Text("Settings")
+                        .bold()
+                    Spacer()
+                    EditButton()
+                        .padding(.trailing)
                 }
-                Spacer()
-                EditButton()
-                    .padding(.trailing)
-                    .font(.custom("CircularStd-Book", size: 17))
+                .padding(.vertical)
+                .background(Color(.secondarySystemGroupedBackground))
+                Divider()
             }
-            .padding(.vertical)
-            .background(Color(.secondarySystemGroupedBackground))
             if editMode?.wrappedValue == .inactive {
                 SettingsSummary(apiToken: $apiToken, dateStyle: $dateStyle)
             } else {

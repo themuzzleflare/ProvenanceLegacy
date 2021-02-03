@@ -4,28 +4,27 @@ struct AllTagsList: View {
     @EnvironmentObject var modelData: ModelData
     
     @State private var showingAddForm: Bool = false
-
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
-
+    
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    
     @State private var searchText: String = ""
-
+    
     private let pageName: String = "Tags"
-
+    
     private var filteredTags: [TagResource] {
         modelData.tags.filter { tag in
             searchText.isEmpty || tag.id.localizedStandardContains(searchText)
         }
     }
-
+    
     private var bottomText: String {
         switch filteredTags.count {
             case 0: return "No Tags"
             default: return "No More Tags"
-
+                
         }
     }
-
+    
     private var addButton: some View {
         Button(action: {
             showingAddForm.toggle()
@@ -35,7 +34,7 @@ struct AllTagsList: View {
                 .accessibilityLabel("Add")
         }
     }
-
+    
     private var refreshButton: some View {
         Button(action: {
             DispatchQueue.main.async {
@@ -96,7 +95,7 @@ struct AllTagsList: View {
                 .accessibilityLabel("Refresh")
         }
     }
-
+    
     var body: some View {
         NavigationView {
             if modelData.tags.isEmpty && modelData.tagsError.isEmpty && modelData.tagsErrorResponse.isEmpty && modelData.tagsStatusCode == 0 {
@@ -159,12 +158,13 @@ struct AllTagsList: View {
                 List {
                     Section {
                         SearchBar(text: $searchText, placeholder: "Search \(modelData.tags.count) \(pageName)")
+                            .listRowInsets(EdgeInsets())
                     }
                     if filteredTags.count != 0 {
                         Section(header: Text(pageName)
                                     .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTags) { tag in
-                                NavigationLink(destination: TransactionsByTag(modelData: modelData, tagName: tag)) {
+                                NavigationLink(destination: TransactionsByTag(tagName: tag)) {
                                     AllTagsRow(tag: tag)
                                 }
                                 .contextMenu {
@@ -196,7 +196,7 @@ struct AllTagsList: View {
             }
         }
     }
-
+    
     private func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
@@ -205,7 +205,7 @@ struct AllTagsList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -245,7 +245,7 @@ struct AllTagsList: View {
         }
         .resume()
     }
-
+    
     private func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
@@ -294,14 +294,14 @@ struct AllTagsList: View {
         }
         .resume()
     }
-
+    
     private func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -341,7 +341,7 @@ struct AllTagsList: View {
         }
         .resume()
     }
-
+    
     private func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
@@ -350,7 +350,7 @@ struct AllTagsList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -396,12 +396,11 @@ struct AddTagForm: View {
     @EnvironmentObject var modelData: ModelData
     
     @Binding var showingAddForm: Bool
-
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
-
+    
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    
     @State private var loading: Bool = false
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -409,7 +408,7 @@ struct AddTagForm: View {
                     Section(header: Text("Transactions")
                                 .font(.custom("CircularStd-Book", size: 12))) {
                         ForEach(modelData.transactions) { transaction in
-                            NavigationLink(destination: AddTagFormStep2(modelData: modelData, transaction: transaction)) {
+                            NavigationLink(destination: AddTagFormStep2(transaction: transaction)) {
                                 TransactionRow(transaction: transaction)
                             }
                             .tag(transaction)
@@ -417,7 +416,7 @@ struct AddTagForm: View {
                     }
                     if modelData.transactionsPagination.next != nil {
                         Section {
-                            if loading == true {
+                            if loading {
                                 ProgressView()
                             } else {
                                 Button(action: {
@@ -457,7 +456,7 @@ struct AddTagForm: View {
             }
         }
     }
-
+    
     private func nextPage(_ paginationString: String) {
         let url = URL(string: paginationString)!
         var request = URLRequest(url: url)
@@ -505,56 +504,44 @@ struct AddTagForm: View {
 }
 
 struct AddTagFormStep2: View {
-    var modelData: ModelData
-
+    @EnvironmentObject var modelData: ModelData
+    
     var transaction: TransactionResource
-
+    
     var body: some View {
         List {
             if modelData.tags.count != 0 {
                 Section(header: Text("Tags")
                             .font(.custom("CircularStd-Book", size: 12))) {
                     ForEach(modelData.tags) { tag in
-                        NavigationLink(destination: AddTagFormStep3(modelData: modelData, transaction: transaction, tag: tag)) {
+                        NavigationLink(destination: AddTagFormStep3(transaction: transaction, tag: tag)) {
                             AllTagsRow(tag: tag)
                         }
                         .tag(tag)
                     }
                 }
             }
-            Section {
-                NavigationLink(destination: AddTagFormStep3Alt(modelData: modelData, transaction: transaction)) {
-                    Text("New Tag")
-                        .font(.custom("CircularStd-Book", size: 17))
-                        .foregroundColor(.accentColor)
-                }
-            }
         }
         .listStyle(GroupedListStyle())
         .navigationTitle("Select Tag")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            NavigationLink("New Tag", destination: AddTagFormStep3Alt(transaction: transaction))
+        }
     }
 }
 
 struct AddTagFormStep3Alt: View {
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
     var transaction: TransactionResource
-
-    @State var newTag: String = ""
-
+    
     @ObservedObject var tagString = TextLimiter(limit: 30)
     @State private var isEditing = false
-
+    
     var body: some View {
         List {
             TextField("Tag Name", text: $tagString.value) { isEditing in
                 self.isEditing = isEditing
-            } onCommit: {
-                DispatchQueue.main.async {
-                    if !tagString.value.isEmpty {
-                        newTag = tagString.value
-                    }
-                }
             }
             .autocapitalization(.none)
             .disableAutocorrection(true)
@@ -563,32 +550,30 @@ struct AddTagFormStep3Alt: View {
         .navigationTitle("New Tag")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            NavigationLink("Next", destination: AddTagFormStep3(modelData: modelData, transaction: transaction, tag: TagResource.init(type: "tags", id: newTag)))
-                .disabled(newTag.isEmpty || tagString.value != newTag)
-                .tag(newTag)
+            NavigationLink("Next", destination: AddTagFormStep3(transaction: transaction, tag: TagResource.init(type: "tags", id: tagString.value)))
+                .disabled(tagString.value.isEmpty)
         }
     }
 }
 
 struct AddTagFormStep3: View {
-    var modelData: ModelData
-
-    @State private var showingFailAlert = false
+    @EnvironmentObject var modelData: ModelData
+    
+    @State private var showingFailAlert: Bool = false
     @State private var addTagStatusCode: Int = 0
-
+    
     private var errorAlert: Alert {
         switch addTagStatusCode {
             case 403: return Alert(title: Text("Forbidden"), message: Text("Too many tags added to this transaction. Each transaction may have up to 6 tags."), dismissButton: .default(Text("Dismiss")))
             default: return Alert(title: Text("Failed"), message: Text("The tag was not added to the transaction."), dismissButton: .default(Text("Dismiss")))
         }
     }
-
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
-
+    
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    
     var transaction: TransactionResource
     var tag: TagResource
-
+    
     var body: some View {
         List {
             Section(header: Text("Adding Tag")
@@ -620,14 +605,14 @@ struct AddTagFormStep3: View {
             })
         }
     }
-
+    
     private func addTag(_ transaction: TransactionResource, tag: TagResource) {
         let url = URL(string: transaction.relationships.tags.links?.`self` ?? "https://api.up.com.au/api/v1/transactions/\(transaction.id)/relationships/tags")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         let bodyObject: [String : Any] = [
             "data": [
                 [
@@ -637,7 +622,7 @@ struct AddTagFormStep3: View {
             ]
         ]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -665,4 +650,3 @@ struct AddTagFormStep3: View {
         .resume()
     }
 }
-

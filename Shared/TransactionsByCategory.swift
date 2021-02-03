@@ -7,20 +7,17 @@ struct TransactionsByCategory: View {
     @State private var transactionsByCategoryStatusCode: Int = 0
     @State private var loadMoreTransactionsByCategoryError: String = ""
 
-    var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
 
-    var categoryName: CategoryResource
-
-    private var category: String {
-        return categoryName.id
-    }
+    var categoryId: String
+    var categoryName: String
 
     @State private var loading = false
 
     @State private var searchText: String = ""
 
     private var pageName: String {
-        return categoryName.attributes.name
+        return categoryName
     }
 
     private var bottomText: String {
@@ -55,7 +52,7 @@ struct TransactionsByCategory: View {
                 }
                 .navigationTitle(pageName)
                 .onAppear {
-                    listTransactionsByCategory(category)
+                    listTransactionsByCategory(categoryId)
                 }
             } else if !transactionsByCategoryError.isEmpty {
                 VStack(alignment: .center, spacing: 0) {
@@ -73,12 +70,13 @@ struct TransactionsByCategory: View {
                 List {
                     Section {
                         SearchBar(text: $searchText, placeholder: searchPlaceholder)
+                            .listRowInsets(EdgeInsets())
                     }
                     if filteredTransactions.count != 0 {
                         Section(header: Text("Transactions")
                                     .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredTransactions) { transaction in
-                                NavigationLink(destination: TransactionView(modelData: modelData, transaction: transaction)) {
+                                NavigationLink(destination: TransactionView(transaction: transaction)) {
                                     TransactionRow(transaction: transaction)
                                 }
                                 .contextMenu {

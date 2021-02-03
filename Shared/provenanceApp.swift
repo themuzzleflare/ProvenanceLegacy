@@ -4,8 +4,7 @@ import SwiftUI
 struct provenanceApp: App {
     @StateObject private var modelData = ModelData()
 
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
 
     var body: some Scene {
         WindowGroup {

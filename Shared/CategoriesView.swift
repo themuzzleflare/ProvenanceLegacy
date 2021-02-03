@@ -3,8 +3,7 @@ import SwiftUI
 struct CategoriesView: View {
     @EnvironmentObject var modelData: ModelData
 
-    @AppStorage("Settings.apiToken")
-    private var apiToken: String = ""
+    @AppStorage("Settings.apiToken") private var apiToken: String = ""
 
     @State private var searchText: String = ""
 
@@ -137,12 +136,13 @@ struct CategoriesView: View {
                 List {
                     Section {
                         SearchBar(text: $searchText, placeholder: "Search \(modelData.categories.count) \(pageName)")
+                            .listRowInsets(EdgeInsets())
                     }
                     if filteredCategories.count != 0 {
                         Section(header: Text(pageName)
                                     .font(.custom("CircularStd-Book", size: 12))) {
                             ForEach(filteredCategories) { category in
-                                NavigationLink(destination: TransactionsByCategory(modelData: modelData, categoryName: category)) {
+                                NavigationLink(destination: TransactionsByCategory(categoryId: category.id, categoryName: category.attributes.name)) {
                                     CategoriesRow(category: category)
                                 }
                                 .contextMenu {
