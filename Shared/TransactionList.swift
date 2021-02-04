@@ -186,6 +186,7 @@ struct TransactionList: View {
         }) {
             Image(systemName: "arrow.up.arrow.down")
                 .imageScale(.large)
+                .accessibilityLabel("Switch Date Style")
         }
     }
     

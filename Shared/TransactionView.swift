@@ -2,58 +2,58 @@ import SwiftUI
 
 struct TransactionView: View {
     @EnvironmentObject var modelData: ModelData
-
+    
     var transaction: TransactionResource
-
+    
     @AppStorage("Settings.dateStyle") private var dateStyle: Settings.DateStyle = .absolute
-
+    
     private var createdDate: String {
         switch dateStyle {
             case .absolute: return transaction.attributes.createdDate
             case .relative: return transaction.attributes.createdDateRelative
         }
     }
-
+    
     private var settledDate: String? {
         switch dateStyle {
             case .absolute: return transaction.attributes.settledDate
             case .relative: return transaction.attributes.settledDateRelative
         }
     }
-
+    
     private var statusIcon: Image {
         switch transaction.attributes.isSettled {
             case true: return Image(systemName: "checkmark.circle")
             case false: return Image(systemName: "clock")
         }
     }
-
+    
     private var statusColour: Color {
         switch transaction.attributes.isSettled {
             case true: return .green
             case false: return .yellow
         }
     }
-
+    
     private var statusString: String {
         switch transaction.attributes.isSettled {
             case true: return "Settled"
             case false: return "Held"
         }
     }
-
+    
     private var categoryFilter: [CategoryResource] {
         modelData.categories.filter { category in
             transaction.relationships.category.data?.id == category.id
         }
     }
-
+    
     private var parentCategoryFilter: [CategoryResource] {
         modelData.categories.filter { pcategory in
             transaction.relationships.parentCategory.data?.id == pcategory.id
         }
     }
-
+    
     private var accountFilter: [AccountResource] {
         modelData.accounts.filter { account in
             transaction.relationships.account.data.id == account.id
@@ -68,13 +68,9 @@ struct TransactionView: View {
                         .font(.custom("CircularStd-Book", size: 17))
                         .foregroundColor(.secondary)
                     Spacer()
-                    Group {
-                        Text(statusString)
-                            .font(.custom("CircularStd-Book", size: 17))
-                        statusIcon
-                            .foregroundColor(statusColour)
-                    }
-                    .multilineTextAlignment(.trailing)
+                    Text(statusString)
+                        .font(.custom("CircularStd-Book", size: 17))
+                        .multilineTextAlignment(.trailing)
                 }
                 ForEach(accountFilter) { account in
                     NavigationLink(destination: TransactionsByRelatedAccount(accountName: account)) {
@@ -171,7 +167,7 @@ struct TransactionView: View {
                                 .multilineTextAlignment(.trailing)
                             }
                         }
-
+                        
                     }
                 }
                 if transaction.attributes.foreignAmount != nil {
@@ -275,5 +271,11 @@ struct TransactionView: View {
         .navigationTitle(transaction.attributes.description)
         .navigationBarTitleDisplayMode(.inline)
         .listStyle(GroupedListStyle())
+        .toolbar {
+            statusIcon
+                .foregroundColor(statusColour)
+                .imageScale(.large)
+                .accessibilityLabel(statusString)
+        }
     }
 }
