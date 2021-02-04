@@ -78,7 +78,7 @@ struct CategoriesView: View {
             listCategories()
             listTags()
         }) {
-            Image(systemName: "arrow.clockwise.circle")
+            Image(systemName: "arrow.clockwise")
                 .imageScale(.large)
                 .accessibilityLabel("Refresh")
         }

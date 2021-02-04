@@ -4,6 +4,7 @@ struct TransactionList: View {
     @EnvironmentObject var modelData: ModelData
     
     @AppStorage("Settings.apiToken") private var apiToken: String = ""
+    @AppStorage("Settings.dateStyle") private var dateStyle: Settings.DateStyle = .absolute
     
     @State private var searchText: String = ""
     
@@ -135,7 +136,7 @@ struct TransactionList: View {
         Button(action: {
             refreshFunction()
         }) {
-            Image(systemName: "arrow.clockwise.circle")
+            Image(systemName: "arrow.clockwise")
                 .imageScale(.large)
                 .accessibilityLabel("Refresh")
         }
@@ -174,6 +175,19 @@ struct TransactionList: View {
     }
     
     private let pageName: String = "Transactions"
+    
+    private var dateSwitch: some View {
+        Button(action: {
+            if dateStyle == .absolute {
+                dateStyle = .relative
+            } else if dateStyle == .relative {
+                dateStyle = .absolute
+            }
+        }) {
+            Image(systemName: "arrow.up.arrow.down")
+                .imageScale(.large)
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -303,6 +317,7 @@ struct TransactionList: View {
                 }
                 .navigationTitle(pageName)
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(leading: dateSwitch)
                 .toolbar {
                     refreshButton
                 }
