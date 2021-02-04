@@ -3,9 +3,9 @@ import SwiftUI
 @main
 struct provenanceApp: App {
     @StateObject private var modelData = ModelData()
-
+    
     @AppStorage("Settings.apiToken") private var apiToken: String = ""
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -16,14 +16,14 @@ struct provenanceApp: App {
                 }
         }
     }
-
+    
     private func listAvailableFonts() {
         for family in UIFont.familyNames.sorted() {
             let names = UIFont.fontNames(forFamilyName: family)
             print("Family: \(family) Font names: \(names)")
         }
     }
-
+    
     private func checkNetwork() {
         modelData.monitor.pathUpdateHandler = { path in
             if path.status == .satisfied {
@@ -55,12 +55,12 @@ struct provenanceApp: App {
                     modelData.tagsStatusCode = 0
                     modelData.accountsStatusCode = 0
                     modelData.categoriesStatusCode = 0
-
+                    
                 }
             }
         }
     }
-
+    
     func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
@@ -69,7 +69,7 @@ struct provenanceApp: App {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -95,21 +95,21 @@ struct provenanceApp: App {
                         print("Accounts Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.accountsError = "JSON Serialisation failed!"
+                            modelData.accountsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.accountsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.accountsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
     }
-
+    
     func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
@@ -144,28 +144,28 @@ struct provenanceApp: App {
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.transactionsError = "JSON Serialisation failed!"
+                            modelData.transactionsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.transactionsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.transactionsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
     }
-
+    
     func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -191,21 +191,21 @@ struct provenanceApp: App {
                         print("Categories Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.categoriesError = "JSON Serialisation failed!"
+                            modelData.categoriesError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.categoriesError = error?.localizedDescription ?? "Unknown error."
+                    modelData.categoriesError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
     }
-
+    
     func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
@@ -214,7 +214,7 @@ struct provenanceApp: App {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -240,16 +240,16 @@ struct provenanceApp: App {
                         print("Tags Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.tagsError = "JSON Serialisation failed!"
+                            modelData.tagsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.tagsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.tagsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()

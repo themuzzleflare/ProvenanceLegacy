@@ -1,4 +1,3 @@
-import Foundation
 import SwiftUI
 import Network
 
@@ -8,7 +7,6 @@ final class ModelData: ObservableObject {
     @Published var transactions = [TransactionResource]()
     @Published var transactionsErrorResponse = [ErrorObject]()
     @Published var transactionsError: String = ""
-    
     @Published var transactionsPagination = Pagination()
     @Published var loadMoreTransactionsError: String = ""
     @Published var transactionsStatusCode: Int = 0
@@ -16,22 +14,19 @@ final class ModelData: ObservableObject {
     @Published var accounts = [AccountResource]()
     @Published var accountsErrorResponse = [ErrorObject]()
     @Published var accountsError: String = ""
-    
     @Published var accountsStatusCode: Int = 0
     
     @Published var categories = [CategoryResource]()
     @Published var categoriesErrorResponse = [ErrorObject]()
     @Published var categoriesError: String = ""
-    
-    @Published var categoriesStatusCode = 0
+    @Published var categoriesStatusCode: Int = 0
     
     @Published var tags = [TagResource]()
     @Published var tagsErrorResponse = [ErrorObject]()
     @Published var tagsError: String = ""
-    
     @Published var tagsPagination = Pagination()
     @Published var loadMoreTagsError: String = ""
-    @Published var tagsStatusCode = 0
+    @Published var tagsStatusCode: Int = 0
     
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "Monitor")
@@ -41,10 +36,7 @@ final class ModelData: ObservableObject {
     let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Provenance"
     let appCopyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "Copyright © 2021 Paul Tavitian"
 }
-
 // MARK: - GIF Images
-var upDuration: TimeInterval = 0.65
-
 var up1: UIImage = UIImage(named: "UpLogoSequence/1")!
 var up2: UIImage = UIImage(named: "UpLogoSequence/2")!
 var up3: UIImage = UIImage(named: "UpLogoSequence/3")!
@@ -54,19 +46,8 @@ var up6: UIImage = UIImage(named: "UpLogoSequence/6")!
 var up7: UIImage = UIImage(named: "UpLogoSequence/7")!
 var up8: UIImage = UIImage(named: "UpLogoSequence/8")!
 var upImages: [UIImage] = [up1, up2, up3, up4, up5, up6, up7, up8]
-let upAnimation: UIImage =  UIImage.animatedImage(with: upImages, duration: upDuration)!
-
-var upWide1: UIImage = UIImage(named: "UpLogoWidescreenSequence/1")!
-var upWide2: UIImage = UIImage(named: "UpLogoWidescreenSequence/2")!
-var upWide3: UIImage = UIImage(named: "UpLogoWidescreenSequence/3")!
-var upWide4: UIImage = UIImage(named: "UpLogoWidescreenSequence/4")!
-var upWide5: UIImage = UIImage(named: "UpLogoWidescreenSequence/5")!
-var upWide6: UIImage = UIImage(named: "UpLogoWidescreenSequence/6")!
-var upWide7: UIImage = UIImage(named: "UpLogoWidescreenSequence/7")!
-var upWide8: UIImage = UIImage(named: "UpLogoWidescreenSequence/8")!
-var upWideImages: [UIImage] = [upWide1, upWide2, upWide3, upWide4, upWide5, upWide6, upWide7, upWide8]
-let upWideAnimation: UIImage =  UIImage.animatedImage(with: upWideImages, duration: upDuration)!
-// MARK: - NSURLSession Protocols & Extensions
+let upAnimation: UIImage =  UIImage.animatedImage(with: upImages, duration: 0.65)!
+// MARK: - Protocols & Extensions for URL Parameter Support
 protocol URLQueryParameterStringConvertible {
     var queryParameters: String {
         get
@@ -112,5 +93,16 @@ func formatDateRelative(dateString: String) -> String {
         return "\(formatter.string(from: date.timeIntervalSinceNow)!.replacingOccurrences(of: "-", with: "")) ago"
     } else {
         return dateString
+    }
+}
+// MARK: - Search String Extension
+extension String {
+    /// Returns `true` if this string contains the provided substring,
+    /// or if the substring is empty. Otherwise, returns `false`.
+    ///
+    /// - Parameter substring: The substring to search for within
+    ///   this string.
+    func hasSubstring(_ substring: String) -> Bool {
+        substring.isEmpty || localizedStandardContains(substring)
     }
 }

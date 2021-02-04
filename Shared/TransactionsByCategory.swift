@@ -170,16 +170,16 @@ struct TransactionsByCategory: View {
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByCategoryError = "JSON Serialisation failed!"
+                            transactionsByCategoryError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    transactionsByCategoryError = error?.localizedDescription ?? "Unknown error."
+                    transactionsByCategoryError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
@@ -215,14 +215,14 @@ struct TransactionsByCategory: View {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByCategoryError = "JSON Serialisation failed!"
+                            loadMoreTransactionsByCategoryError = "JSON Decoding Failed!"
                             loading.toggle()
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    loadMoreTransactionsByCategoryError = error?.localizedDescription ?? "Unknown error."
+                    loadMoreTransactionsByCategoryError = error?.localizedDescription ?? "Unknown Error!"
                     loading.toggle()
                 }
             }

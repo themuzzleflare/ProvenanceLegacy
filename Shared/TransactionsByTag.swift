@@ -227,16 +227,16 @@ struct TransactionsByTag: View {
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            transactionsByTagError = "JSON Serialisation failed!"
+                            transactionsByTagError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    transactionsByTagError = error?.localizedDescription ?? "Unknown error."
+                    transactionsByTagError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
@@ -272,14 +272,14 @@ struct TransactionsByTag: View {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            loadMoreTransactionsByTagError = "JSON Serialisation failed!"
+                            loadMoreTransactionsByTagError = "JSON Decoding Failed!"
                             loading.toggle()
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    loadMoreTransactionsByTagError = error?.localizedDescription ?? "Unknown error."
+                    loadMoreTransactionsByTagError = error?.localizedDescription ?? "Unknown Error!"
                     loading.toggle()
                 }
             }
@@ -321,16 +321,16 @@ struct TransactionsByTag: View {
                         print("Accounts Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.accountsError = "JSON Serialisation failed!"
+                            modelData.accountsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.accountsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.accountsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
@@ -370,16 +370,16 @@ struct TransactionsByTag: View {
                         print("Transactions Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.transactionsError = "JSON Serialisation failed!"
+                            modelData.transactionsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.transactionsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.transactionsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
@@ -417,16 +417,16 @@ struct TransactionsByTag: View {
                         print("Categories Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.categoriesError = "JSON Serialisation failed!"
+                            modelData.categoriesError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.categoriesError = error?.localizedDescription ?? "Unknown error."
+                    modelData.categoriesError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()
@@ -466,16 +466,16 @@ struct TransactionsByTag: View {
                         print("Tags Fetch Successful: HTTP \(statusCode)")
                     } else {
                         DispatchQueue.main.async {
-                            modelData.tagsError = "JSON Serialisation failed!"
+                            modelData.tagsError = "JSON Decoding Failed!"
                         }
-                        print("JSON Serialisation failed!")
+                        print("JSON Decoding Failed!")
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    modelData.tagsError = error?.localizedDescription ?? "Unknown error."
+                    modelData.tagsError = error?.localizedDescription ?? "Unknown Error!"
                 }
-                print(error?.localizedDescription ?? "Unknown error.")
+                print(error?.localizedDescription ?? "Unknown Error!")
             }
         }
         .resume()

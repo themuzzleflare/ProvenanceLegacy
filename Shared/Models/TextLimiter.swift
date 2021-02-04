@@ -2,7 +2,7 @@ import SwiftUI
 
 class TextLimiter: ObservableObject {
     private let limit: Int
-
+    
     init(limit: Int) {
         self.limit = limit
     }
@@ -17,6 +17,6 @@ class TextLimiter: ObservableObject {
             }
         }
     }
-
+    
     @Published var hasReachedLimit = false
 }

@@ -1,5 +1,4 @@
 import Foundation
-import SwiftUI
 
 struct Transaction: Hashable, Codable {
     var data: [TransactionResource]

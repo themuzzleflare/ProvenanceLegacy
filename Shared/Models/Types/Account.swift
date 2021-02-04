@@ -1,5 +1,4 @@
 import Foundation
-import SwiftUI
 
 struct Account: Hashable, Codable {
     var data: [AccountResource]
