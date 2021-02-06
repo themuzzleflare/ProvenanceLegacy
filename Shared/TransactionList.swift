@@ -290,8 +290,12 @@ struct TransactionList: View {
                     }
                     if modelData.transactionsPagination.next != nil {
                         Section {
-                            if loading == true {
-                                ProgressView()
+                            if loading {
+                                HStack(alignment: .center, spacing: 0) {
+                                    Spacer()
+                                    ProgressView()
+                                    Spacer()
+                                }
                             } else {
                                 Button(action: {
                                     DispatchQueue.main.async {

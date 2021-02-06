@@ -6,42 +6,42 @@ struct TransactionsByCategory: View {
     @State private var transactionsByCategoryError: String = ""
     @State private var transactionsByCategoryStatusCode: Int = 0
     @State private var loadMoreTransactionsByCategoryError: String = ""
-
+    
     @EnvironmentObject var modelData: ModelData
-
+    
     var categoryId: String
     var categoryName: String
-
+    
     @State private var loading = false
-
+    
     @State private var searchText: String = ""
-
+    
     private var pageName: String {
         return categoryName
     }
-
+    
     private var bottomText: String {
         switch filteredTransactions.count {
             case 0: return "No Transactions"
             default: return "No More Transactions"
         }
     }
-
+    
     private var searchPlaceholder: String {
         switch transactionsByCategoryData.count {
             case 1: return "Search 1 Transaction"
             default: return "Search \(transactionsByCategoryData.count) Transactions"
         }
     }
-
+    
     private var filteredTransactions: [TransactionResource] {
         transactionsByCategoryData.filter { transaction in
             searchText.isEmpty || transaction.attributes.description.localizedStandardContains(searchText)
         }
     }
-
+    
     @AppStorage("Settings.apiToken") private var apiToken: String = ""
-
+    
     var body: some View {
         Group {
             if transactionsByCategoryData.isEmpty && transactionsByCategoryError.isEmpty && transactionsByCategoryStatusCode == 0 {
@@ -94,8 +94,12 @@ struct TransactionsByCategory: View {
                     }
                     if transactionsByCategoryPagination.next != nil {
                         Section {
-                            if loading == true {
-                                ProgressView()
+                            if loading {
+                                HStack(alignment: .center, spacing: 0) {
+                                    Spacer()
+                                    ProgressView()
+                                    Spacer()
+                                }
                             } else {
                                 Button(action: {
                                     DispatchQueue.main.async {
@@ -135,7 +139,7 @@ struct TransactionsByCategory: View {
             }
         }
     }
-
+    
     private func listTransactionsByCategory(_ category: String) {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["filter[category]":category, "page[size]":"100"]
@@ -184,7 +188,7 @@ struct TransactionsByCategory: View {
         }
         .resume()
     }
-
+    
     private func nextPage(_ paginationString: String) {
         let url = URL(string: paginationString)!
         var request = URLRequest(url: url)

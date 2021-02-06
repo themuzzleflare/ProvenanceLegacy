@@ -2,9 +2,9 @@ import SwiftUI
 
 struct TransactionRow: View {
     var transaction: TransactionResource
-
+    
     @AppStorage("Settings.dateStyle") private var dateStyle: Settings.DateStyle = .absolute
-
+    
     private var createdDate: String {
         switch dateStyle {
             case .absolute: return transaction.attributes.createdDate

@@ -4,7 +4,7 @@ struct About: View {
     @EnvironmentObject var modelData: ModelData
     
     @State private var showingSettings: Bool = false
-
+    
     private var settingsButton: some View {
         Button(action: {
             showingSettings.toggle()
@@ -14,9 +14,9 @@ struct About: View {
                 .accessibilityLabel("Settings")
         }
     }
-
+    
     private let pageName: String = "About"
-
+    
     var body: some View {
         NavigationView {
             List {

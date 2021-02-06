@@ -8,15 +8,15 @@ struct TransactionsByAccount: View {
     @State private var loadMoreTransactionsByAccountError: String = ""
     
     @State private var showingAccountInfo: Bool = false
-
+    
     @EnvironmentObject var modelData: ModelData
-
+    
     var accountName: AccountResource
-
+    
     private var account: String {
         return accountName.id
     }
-
+    
     private var infoButton: some View {
         Button(action: {
             showingAccountInfo.toggle()
@@ -26,37 +26,37 @@ struct TransactionsByAccount: View {
                 .accessibilityLabel("Info")
         }
     }
-
+    
     @State private var loading = false
-
+    
     @State private var searchText: String = ""
-
+    
     private var pageName: String {
         return accountName.attributes.displayName
     }
-
+    
     private var bottomText: String {
         switch filteredTransactions.count {
             case 0: return "No Transactions"
             default: return "No More Transactions"
         }
     }
-
+    
     private var searchPlaceholder: String {
         switch transactionsByAccountData.count {
             case 1: return "Search 1 Transaction"
             default: return "Search \(transactionsByAccountData.count) Transactions"
         }
     }
-
+    
     private var filteredTransactions: [TransactionResource] {
         transactionsByAccountData.filter { transaction in
             searchText.isEmpty || transaction.attributes.description.localizedStandardContains(searchText)
         }
     }
-
+    
     @AppStorage("Settings.apiToken") private var apiToken: String = ""
-
+    
     var body: some View {
         Group {
             if transactionsByAccountData.isEmpty && transactionsByAccountError.isEmpty && transactionsByAccountStatusCode == 0 {
@@ -109,8 +109,12 @@ struct TransactionsByAccount: View {
                     }
                     if transactionsByAccountPagination.next != nil {
                         Section {
-                            if loading == true {
-                                ProgressView()
+                            if loading {
+                                HStack(alignment: .center, spacing: 0) {
+                                    Spacer()
+                                    ProgressView()
+                                    Spacer()
+                                }
                             } else {
                                 Button(action: {
                                     DispatchQueue.main.async {
@@ -157,7 +161,7 @@ struct TransactionsByAccount: View {
             }
         }
     }
-
+    
     private func listTransactionsByAccount(_ account: String) {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts/\(account)/transactions")!
         let urlParams = ["page[size]":"100"]
@@ -206,7 +210,7 @@ struct TransactionsByAccount: View {
         }
         .resume()
     }
-
+    
     private func nextPage(_ paginationString: String) {
         let url = URL(string: paginationString)!
         var request = URLRequest(url: url)
@@ -257,10 +261,10 @@ struct AccountInfo: View {
     @EnvironmentObject var modelData: ModelData
     
     @Binding var showingAccountInfo: Bool
-
+    
     var account: AccountResource
     var transactionsByAccountData: [TransactionResource]
-
+    
     var body: some View {
         NavigationView {
             List {

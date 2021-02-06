@@ -2,11 +2,11 @@ import SwiftUI
 
 struct AccountList: View {
     @EnvironmentObject var modelData: ModelData
-
+    
     @AppStorage("Settings.apiToken") private var apiToken: String = ""
-
+    
     private let pageName: String = "Accounts"
-
+    
     private var refreshButton: some View {
         Button(action: {
             DispatchQueue.main.async {
@@ -67,7 +67,7 @@ struct AccountList: View {
                 .accessibilityLabel("Refresh")
         }
     }
-
+    
     var body: some View {
         NavigationView {
             if modelData.accounts.isEmpty && modelData.accountsError.isEmpty && modelData.accountsErrorResponse.isEmpty && modelData.accountsStatusCode == 0 {
@@ -139,7 +139,7 @@ struct AccountList: View {
             }
         }
     }
-
+    
     private func listAccounts() {
         var url = URL(string: "https://api.up.com.au/api/v1/accounts")!
         let urlParams = ["page[size]":"100"]
@@ -148,7 +148,7 @@ struct AccountList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -188,7 +188,7 @@ struct AccountList: View {
         }
         .resume()
     }
-
+    
     private func listTransactions() {
         var url = URL(string: "https://api.up.com.au/api/v1/transactions")!
         let urlParams = ["page[size]":"100"]
@@ -237,14 +237,14 @@ struct AccountList: View {
         }
         .resume()
     }
-
+    
     private func listCategories() {
         let url = URL(string: "https://api.up.com.au/api/v1/categories")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -284,7 +284,7 @@ struct AccountList: View {
         }
         .resume()
     }
-
+    
     private func listTags() {
         var url = URL(string: "https://api.up.com.au/api/v1/tags")!
         let urlParams = ["page[size]":"200"]
@@ -293,7 +293,7 @@ struct AccountList: View {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
-
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if (error == nil) {
                 let statusCode = (response as! HTTPURLResponse).statusCode

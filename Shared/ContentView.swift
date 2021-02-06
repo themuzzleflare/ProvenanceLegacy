@@ -17,33 +17,33 @@ struct ContentView: View {
     
     var body: some View {
         if modelData.connectivity {
-                TabView(selection: $selection) {
-                    TransactionList()
-                        .tabItem {
-                            Label("Transactions", systemImage: "list.bullet")
-                        }
-                        .tag(Tab.transactions)
-                    AccountList()
-                        .tabItem {
-                            Label("Accounts", systemImage: "list.bullet.rectangle")
-                        }
-                        .tag(Tab.accounts)
-                    AllTagsList()
-                        .tabItem {
-                            Label("Tags", systemImage: "tag")
-                        }
-                        .tag(Tab.tags)
-                    CategoriesView()
-                        .tabItem {
-                            Label("Categories", systemImage: "arrow.up.arrow.down.circle")
-                        }
-                        .tag(Tab.categories)
-                    About()
-                        .tabItem {
-                            Label("About", systemImage: "info.circle")
-                        }
-                        .tag(Tab.about)
-                }
+            TabView(selection: $selection) {
+                TransactionList()
+                    .tabItem {
+                        Label("Transactions", systemImage: "list.bullet")
+                    }
+                    .tag(Tab.transactions)
+                AccountList()
+                    .tabItem {
+                        Label("Accounts", systemImage: "list.bullet.rectangle")
+                    }
+                    .tag(Tab.accounts)
+                AllTagsList()
+                    .tabItem {
+                        Label("Tags", systemImage: "tag")
+                    }
+                    .tag(Tab.tags)
+                CategoriesView()
+                    .tabItem {
+                        Label("Categories", systemImage: "arrow.up.arrow.down.circle")
+                    }
+                    .tag(Tab.categories)
+                About()
+                    .tabItem {
+                        Label("About", systemImage: "info.circle")
+                    }
+                    .tag(Tab.about)
+            }
         } else {
             VStack(alignment: .center, spacing: 0) {
                 Text("Error")
